@@ -1,76 +1,166 @@
-"use client";
-import React, { useEffect } from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@nextui-org/react";
-import 'aos/dist/aos.css'; // Import AOS styles
-import AOS from 'aos';
+'use client'
 
-const validators = [
-  { publicKey: "0x849d44...fd8f2a", operators: ["SSV Labs", "SSV Labs 2", "SSV Labs 3", "SSV Labs 4"] },
-  { publicKey: "0xaf4e0b...8806b9", operators: ["SSV Labs", "SSV Labs 2", "SSV Labs 3", "SSV Labs 4"] },
-  { publicKey: "0x84d4f2...833388", operators: ["SSV Labs", "SSV Labs 2", "SSV Labs 3", "SSV Labs 4"] },
-  { publicKey: "0xaf89b5...63c484", operators: ["SSV Labs", "SSV Labs 2", "SSV Labs 3", "SSV Labs 4"] },
-  { publicKey: "0xb8aa5e...7ecb8d", operators: ["SSV Labs", "SSV Labs 2", "SSV Labs 3", "SSV Labs 4"] },
-  { publicKey: "0xb561ed...9134da", operators: ["SSV Labs", "SSV Labs 2", "SSV Labs 3", "SSV Labs 4"] },
-  { publicKey: "0x8975f4...108cb6", operators: ["SSV Labs", "SSV Labs 2", "SSV Labs 3", "SSV Labs 4"] },
-];
+import { useState, useEffect } from 'react'
+import { CheckCircleIcon, CopyIcon, CheckIcon, XCircleIcon, X, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import copy from 'clipboard-copy'
+import OperatorInfovalidator from './validatorpopup' // Adjust according to your modal component
 
 export default function ValidatorsTable() {
+  const [validators, setValidators] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [copiedStates, setCopiedStates] = useState<{ [key: string]: boolean }>({})
+  const [selectedValidator, setSelectedValidator] = useState<any>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const itemsPerPage = 10
+
   useEffect(() => {
-    AOS.init({ duration: 1000 }); // Initialize AOS with desired options
-  }, []);
+    fetchValidators()
+  }, [])
+
+  const fetchValidators = async () => {
+    try {
+      const response = await fetch('/api/get-data-validators')
+      if (!response.ok) {
+        throw new Error('Failed to fetch validators')
+      }
+      const data = await response.json()
+      setValidators(data.validators)
+      setTotalPages(Math.ceil(data.validators.length / itemsPerPage))
+      setLoading(false)
+    } catch (err:any) {
+      setError(err.message)
+      setLoading(false)
+    }
+  }
+
+  const handleCopy = (text:any, field:any, index:any) => {
+    copy(text)
+    setCopiedStates({ ...copiedStates, [`${field}-${index}`]: true })
+    setTimeout(() => {
+      setCopiedStates({ ...copiedStates, [`${field}-${index}`]: false })
+    }, 2000)
+  }
+
+  const openModal = (validator:any) => {
+    setSelectedValidator(validator)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setSelectedValidator(null)
+    setIsModalOpen(false)
+  }
+
+  const goToPage = (page:any) => {
+    setCurrentPage(page)
+  }
+
+  const getPaginatedData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return validators.slice(startIndex, endIndex)
+  }
+
+  if (loading) return <div className="text-white">Loading...</div>
+  if (error) return <div className="text-red-500">Error: {error}</div>
+
+  const paginatedValidators = getPaginatedData()
 
   return (
-    <div
-      className="bg-[rgba(249,250,251,0.1)] p-4 w-[45%] ml-[2%] rounded-lg overflow-hidden"
-      data-aos="fade-left" // Apply AOS fade-left animation
-      data-aos-duration="1000" // Optional: Adjust the duration of the animation
-    >
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-white">Validators</h2>
-        <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 active:bg-blue-700 active:scale-95">
-          View More
-        </button>
+    <div className="bg-gray-900 text-gray-100 p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">Validators</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full">
+          <thead>
+            <tr className="border-b border-gray-700">
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Public Key</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Owner</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Cluster</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedValidators.map((validator:any, index:any) => (
+              <tr key={index} className="border-b border-gray-800 hover:bg-gray-800">
+                <td className="py-3 px-4 text-sm">{validator.public_key.slice(0, 10)}...{validator.public_key.slice(-4)}</td>
+                <td className="py-3 px-4 text-sm">
+                  <div className="flex items-center space-x-2">
+                    <span 
+                      onClick={() => openModal(validator)}
+                      className="bg-blue-900 text-blue-300 py-1 px-2 rounded-full cursor-pointer hover:bg-blue-700 hover:underline"
+                    >
+                      {validator.owner_address.slice(0, 6)}...{validator.owner_address.slice(-4)}
+                    </span>
+                    <button
+                      onClick={() => handleCopy(validator.owner_address, 'owner', index)}
+                      className="text-gray-400 hover:text-gray-200 transition-colors"
+                    >
+                      {copiedStates[`owner-${index}`] ? (
+                        <CheckIcon className="w-4 h-4" />
+                      ) : (
+                        <CopyIcon className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+                </td>
+                <td className="py-3 px-4 text-sm">{validator.cluster.slice(0, 6)}...{validator.cluster.slice(-4)}</td>
+                <td className="py-3 px-4">
+                  {validator.status === 'Active' ? (
+                    <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                  ) : (
+                    <XCircleIcon className="w-5 h-5 text-red-500" />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      
-      <Table
-        aria-label="Validators table"
-        style={{
-          height: "auto",
-          minWidth: "100%",
-          backgroundColor: "#0D1A2D",
-        }}
-        selectionMode="none"
-      >
-        <TableHeader>
-          <TableColumn>
-            <span className="text-gray-400">Public Key</span>
-          </TableColumn>
-          <TableColumn>
-            <span className="text-gray-400">Operators</span>
-          </TableColumn>
-        </TableHeader>
-        <TableBody items={validators}>
-          {(item) => (
-            <TableRow
-              key={item.publicKey}
-              className="border-b border-[#1A2A3D] hover:bg-[#1A2A3D] cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-              data-aos="fade-left" // Apply AOS fade-left animation
-              data-aos-duration="1000" // Optional: Adjust the duration of the animation
+
+      {totalPages > 1 && (
+        <div className="mt-4 flex justify-between items-center">
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
+          >
+            <ChevronLeftIcon className="w-5 h-5" />
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
+          >
+            <ChevronRightIcon className="w-5 h-5" />
+          </button>
+        </div>
+      )}
+
+      {isModalOpen && selectedValidator && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-900 rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
             >
-              <TableCell className="py-3">
-                <span className="text-[#3694FF]">{item.publicKey}</span>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-wrap gap-2">
-                  {item.operators.map((operator, index) => (
-                    <span key={index} className="text-white">{operator}</span>
-                  ))}
-                </div>
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+              <X size={24} />
+            </button>
+            <OperatorInfovalidator
+              publicKey={selectedValidator.public_key}
+              cluster={selectedValidator.cluster}
+              status={selectedValidator.status}
+              owner={selectedValidator.owner_address}
+              operators={selectedValidator.operators}
+            />
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }
