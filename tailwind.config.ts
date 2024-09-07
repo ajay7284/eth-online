@@ -1,5 +1,8 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import { Config } from 'tailwindcss'
+import typography from '@tailwindcss/typography'
+import defaultTheme from 'tailwindcss/defaultTheme'
+
+const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,8 +12,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       animation: {
         marquee: "marquee var(--duration) linear infinite",
@@ -26,7 +28,12 @@ module.exports = {
           to: { transform: "translateY(calc(-100% - var(--gap)))" },
         },
       },
+      fontFamily: {
+        sans: ['Geist', ...defaultTheme.fontFamily.sans], // Make Geist the default sans font
+      },
     },
   },
-  plugins: [],
-};
+  plugins: [typography],
+}
+
+export default config

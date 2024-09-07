@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import Marquee from "../lib/CardUtil";
 import NumberTickerDemo from "./NumberTickerDemo";
+import { url } from "inspector";
 
 const data = [
   { type: "Validators", value: 100 },
@@ -8,7 +9,7 @@ const data = [
   { type: "30d Validators Growth", value: 100 },
   { type: "Operators", value: 5000 },
   { type: "Operator", value: 100 },
-  { type: "7d Operator", value: 50 },
+  { type: "7d Operator  Growth", value: 50 },
   { type: "30d Operator Growth", value: 100 },
 ];
 
@@ -24,10 +25,19 @@ const DataCard = ({ type, value }: { type: string; value: number }) => {
         // dark styles
         "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]",
       )}
+
     >
+      <img src="/icons/chart.png" alt="" style={{
+        height:"40px",
+        width:"40px",
+      position:"absolute",
+      right:"15px"
+      }}/>
       <div className="flex flex-col justify-center items-center gap-2">
         <NumberTickerDemo value={value} />
-        <h1 className="text-white">{type}</h1>
+        <h1 className="text-white shadow-xl text-bold text-md" style={{
+          fontSize:"20x"
+        }}>{type}</h1>
       </div>
     </figure>
   );
@@ -35,7 +45,7 @@ const DataCard = ({ type, value }: { type: string; value: number }) => {
 
 export default function MarqueeDemo() {
   return (
-    <div className="relative flex h-[250px] w-[80%] ml-[10%] items-center mt-[30px] overflow-hidden bg-background md:shadow-xl">
+    <div className="relative flex h-[250px] w-[80%] ml-[0%] items-center mt-[30px] overflow-hidden bg-background ">
       <Marquee pauseOnHover className="[--duration:20s]">
         {data.map((item) => (
           <DataCard key={item.type} {...item} />

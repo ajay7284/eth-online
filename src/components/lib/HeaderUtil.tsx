@@ -1,11 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion, Variants } from "framer-motion";
-
 import { cn } from "../lib/utils";
+import React from "react";
 
 interface GradualSpacingProps {
-  text: string;
+  text: React.ReactNode; // Accept JSX as well as strings
   duration?: number;
   delayMultiple?: number;
   framerProps?: Variants;
@@ -22,22 +22,39 @@ export default function GradualSpacing({
   },
   className,
 }: GradualSpacingProps) {
+  // Check if text is a string or JSX element
+  const isString = typeof text === "string";
+
   return (
-    <div className="flex justify-center space-x-1">
-      <AnimatePresence>
-        {text.split("").map((char, i) => (
-          <motion.h1
-            key={i}
+    <div className="flex justify-center">
+      <AnimatePresence mode="wait"> {/* Added mode='wait' for smooth transitions */}
+        {isString ? (
+          text.split("").map((char, i) => (
+            <motion.h1
+              key={i}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={framerProps}
+              transition={{ duration, delay: i * delayMultiple }}
+              className={cn("drop-shadow-sm", className)}
+            >
+              {char === " " ? <span>&nbsp;</span> : char}
+            </motion.h1>
+          ))
+        ) : (
+          <motion.div
+            key="custom-text" // Added key to ensure correct re-rendering
             initial="hidden"
             animate="visible"
             exit="hidden"
             variants={framerProps}
-            transition={{ duration, delay: i * delayMultiple }}
-            className={cn("drop-shadow-sm ", className)}
+            transition={{ duration }}
+            className={cn("drop-shadow-sm", className)}
           >
-            {char === " " ? <span>&nbsp;</span> : char}
-          </motion.h1>
-        ))}
+            {text}
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );

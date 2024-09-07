@@ -29,6 +29,9 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --font-inter: 'Inter', sans-serif;
+    --font-geist: 'GeistSans', sans-serif;
+
   }
 
   .dark {
@@ -61,5 +64,47 @@
 
 
 body {
-  background-color: #1D1454;
+  /* background-color: #0E0E52; */
+  /* background-color: #1D2971; */
+  background-color: #0c014d;
+  /* background-color: #0F0F61; */
+  font-family: var(--font-geist);
+
+
+}
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scrollbar thumb */
+  border-radius: 6px; /* Rounded corners for the scrollbar thumb */
+  border: 3px solid #f1f1f1; /* Padding around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker color on hover */
+}
+
+/* Scrollbar styling for Firefox */
+* {
+  scrollbar-width: thin; /* Make the scrollbar thinner */
+  scrollbar-color: #888 #f1f1f1; /* Set the thumb and track colors */
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+  color: #fff;
+  font-weight: bold;
+  margin-top: 25px;
+}
+
+.card-container {
+  transition: width 0.3s ease;
 }
