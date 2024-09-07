@@ -19,7 +19,7 @@ const initialData: ClusterGroup[] = [
 
 const colors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3']
 
-export default function InteractiveBubbleChart() {
+export default function ClusterGraph() {
   const [data, setData] = useState<ClusterGroup[]>(initialData)
   const [selectedBubble, setSelectedBubble] = useState<ClusterGroup | null>(null)
   const [dragging, setDragging] = useState<number | null>(null)
