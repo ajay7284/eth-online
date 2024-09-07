@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import {
   CheckCircleIcon,
@@ -13,6 +14,7 @@ export default function DataTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [copiedStates, setCopiedStates] = useState({});
+  const [hoveredOperator, setHoveredOperator] = useState(null);
 
   useEffect(() => {
     fetchOperators();
@@ -25,7 +27,6 @@ export default function DataTable() {
         throw new Error("Failed to fetch operators");
       }
       const data = await response.json();
-      // Extracting only relevant fields: name, owner_address, validators, status
       const formattedData = data.operators.map((operator) => ({
         name: operator.name,
         owner_address: operator.owner_address,
@@ -80,16 +81,27 @@ export default function DataTable() {
                 className="border-b border-gray-800 hover:bg-gray-800"
               >
                 <td className="py-3 px-4 text-sm">
-                  {" "}
-                  <div className="flex items-center space-x-2">
-                    {/* Image before the operator name */}
+                  <div className="flex items-center space-x-2 relative">
                     <img
-                      src={operator.logo || '/icons/logo.png'} // Assuming the operator object has a logo URL
+                      src={operator.logo || '/icons/logo.png'}
                       alt={`${operator.name} logo`}
                       className="w-6 h-6 rounded-full"
                     />
-                    {/* Operator name */}
-                    <span >{operator.name}</span>
+                    <span
+                      onMouseEnter={() => setHoveredOperator(operator)}
+                      onMouseLeave={() => setHoveredOperator(null)}
+                      className="cursor-pointer"
+                    >
+                      {operator.name.slice(0, 6)}...{operator.name.slice(-4)}
+                    </span>
+                    {hoveredOperator === operator && (
+                      <div
+                        className="absolute left-0 top-full mt-1 p-2 bg-gray-700 text-white rounded shadow-lg z-10  transition-opacity duration-300"
+                        style={{ minWidth: '200px' }}
+                      >
+                        {operator.name}
+                      </div>
+                    )}
                   </div>
                 </td>
                 <td className="py-3 px-4 text-sm">
