@@ -4,15 +4,16 @@ import NumberTicker from './lib/Count';
 import NumberTickerDemo from './magicui/NumberTickerDemo';
 import { GradualSpacingDemo } from './magicui/GradualSpacingDemo';
 import { FlipTextDemo } from './magicui/FlipTextDemo';
-import NumberData from './NumberData';
+import DataTable from './DataTable';
+import ValidatorsTable from './ValidatorsTable';
 
 export default function Hero() {
   return (
-    <div className='ml-[80px] bg-black'>
+    <div className=' ' 
+    >
       <GradualSpacingDemo/>
       <FlipTextDemo/>
-      <NumberData/>
-      <MarqueeDemo />
+      <MarqueeDemo /> 
      </div>
   )
 }

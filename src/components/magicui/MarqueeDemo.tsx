@@ -1,94 +1,50 @@
 import { cn } from "@/lib/utils";
 import Marquee from "../lib/CardUtil";
+import NumberTickerDemo from "./NumberTickerDemo";
 
-const reviews = [
-  {
-    name: "Jack",
-    username: "@jack",
-    body: "I've never seen anything like this before. It's amazing. I love it.",
-    img: "https://avatar.vercel.sh/jack",
-  },
-  {
-    name: "Jill",
-    username: "@jill",
-    body: "I don't know what to say. I'm speechless. This is amazing.",
-    img: "https://avatar.vercel.sh/jill",
-  },
-  {
-    name: "John",
-    username: "@john",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/john",
-  },
-  {
-    name: "Jane",
-    username: "@jane",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jane",
-  },
-  {
-    name: "Jenny",
-    username: "@jenny",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jenny",
-  },
-  {
-    name: "James",
-    username: "@james",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/james",
-  },
+const data = [
+  { type: "Validators", value: 100 },
+  { type: "7d Validators Growth", value: 100 },
+  { type: "30d Validators Growth", value: 100 },
+  { type: "Operators", value: 5000 },
+  { type: "Operator", value: 100 },
+  { type: "7d Operator", value: 50 },
+  { type: "30d Operator Growth", value: 100 },
 ];
 
-const firstRow = reviews.slice(0, reviews.length / 2);
-const secondRow = reviews.slice(reviews.length / 2);
 
-const ReviewCard = ({
-  img,
-  name,
-  username,
-  body,
-}: {
-  img: string;
-  name: string;
-  username: string;
-  body: string;
-}) => {
+
+const DataCard = ({ type, value }: { type: string; value: number }) => {
   return (
     <figure
       className={cn(
-        "relative w-64 h-[250px] cursor-pointer overflow-hidden rounded-xl border p-4",
+        "relative w-64 h-[100px] cursor-pointer overflow-hidden rounded-xl border p-4",
         // light styles
         "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
         // dark styles
         "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]",
       )}
     >
-      <div className="flex flex-row items-center gap-2">
-        <img className="rounded-full" width="32" height="32" alt="" src={img} />
-        <div className="flex flex-col">
-          <figcaption className="text-sm font-medium dark:text-white">
-            {name}
-          </figcaption>
-          <p className="text-xs font-medium dark:text-white/40">{username}</p>
-        </div>
+      <div className="flex flex-col justify-center items-center gap-2">
+        <NumberTickerDemo value={value} />
+        <h1 className="text-white">{type}</h1>
       </div>
-      <blockquote className="mt-2 text-sm text-white">{body}</blockquote>
     </figure>
   );
 };
 
 export default function MarqueeDemo() {
   return (
-    <div className="relative flex h-[500px] w-[80%] ml-[10%]  flex-col items-center mt-[30px] overflow-hidden  bg-background md:shadow-xl">
+    <div className="relative flex h-[250px] w-[80%] ml-[10%] items-center mt-[30px] overflow-hidden bg-background md:shadow-xl">
       <Marquee pauseOnHover className="[--duration:20s]">
-        {firstRow.map((review) => (
-          <ReviewCard key={review.username} {...review} />
+        {data.map((item) => (
+          <DataCard key={item.type} {...item} />
         ))}
       </Marquee>
+      {/* Uncomment if you want to add the second row */}
       {/* <Marquee reverse pauseOnHover className="[--duration:20s]">
-        {secondRow.map((review) => (
-          <ReviewCard key={review.username} {...review} />
+        {secondRow.map((item) => (
+          <DataCard key={item.type} {...item} />
         ))}
       </Marquee> */}
       {/* <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white dark:from-background"></div>

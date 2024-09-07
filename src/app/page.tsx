@@ -1,18 +1,24 @@
 import Image from "next/image";
-import Sidebar from "@/components/Sidebar";
 import Hero from "@/components/Hero";
+import Navbar from "@/components/ui/Navbar";
+import DataTable from "@/components/DataTable";
+import ValidatorsTable from "@/components/ValidatorsTable";
 
 export default function Home() {
   return (
    <div
     style={{
-   backgroundColor:"black",
+   backgroundColor:"#1D1454",
    width:"100%",
-   height:"100vh"
+   height:"100%"
   }}
   >
-    <Sidebar/>
+    <Navbar/>
     <Hero/>
+    <div className='flex mt-[20px]'>
+      <DataTable/>
+      <ValidatorsTable/>
+      </div>
    </div>
   );
 }

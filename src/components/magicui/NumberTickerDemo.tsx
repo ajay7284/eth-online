@@ -1,9 +1,9 @@
 import NumberTicker from "../lib/Count";
 
-const NumberTickerDemo = () => {
+const NumberTickerDemo = ({value}:any) => {
   return (
-    <p className="whitespace-pre-wrap ml-[20px] font-medium tracking-tighter text-black dark:text-white">
-      <NumberTicker value={100} />
+    <p className="whitespace-pre-wrap  font-medium tracking-tighter text-black dark:text-white">
+      <NumberTicker value={value} />
     </p>
   );
 };
