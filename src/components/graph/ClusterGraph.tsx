@@ -7,7 +7,7 @@ import { set } from 'date-fns';
 
 // Initialize the Apollo Client
 const client = new ApolloClient({
-  uri: `https://gateway.thegraph.com/api/${process.env.SUNGRAPH_ENV}/subgraphs/id/7V45fKPugp9psQjgrGsfif98gWzCyC6ChN7CW98VyQnr`,
+  uri: `https://gateway.thegraph.com/api/${process.env.NEXT_PUBLIC_SUBGRAPH_ENV}/subgraphs/id/7V45fKPugp9psQjgrGsfif98gWzCyC6ChN7CW98VyQnr`,
   cache: new InMemoryCache()
 });
 
