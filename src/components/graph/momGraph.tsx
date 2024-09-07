@@ -48,7 +48,7 @@ export default function MomGraph(): JSX.Element {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-gray-900 p-6 rounded-lg max-w-2xl mx-auto"
+        className="bg-gray-900 p-6 rounded-lg max-w-4xl mx-auto"
       >
         <h2 className="text-blue-400 text-2xl font-bold mb-4">Operators Growth MoM</h2>
         <ResponsiveContainer width="100%" height={400}>
