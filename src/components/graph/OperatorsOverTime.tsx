@@ -34,49 +34,28 @@ interface DataPoint {
   removed: number;
 }
 
-// Generate dummy data for the chart
-const generateData = (startDate: Date, days: number): DataPoint[] => {
-  let data: DataPoint[] = []
-  let operators = 0
-  for (let i = 0; i < days; i++) {
-    const date = addDays(startDate, i)
-    const added = Math.floor(Math.random() * 3)
-    const removed = Math.random() < 0.1 ? 1 : 0
-    operators += added - removed
-    data.push({
-      date: format(date, 'yyyy-MM-dd'),
-      operators,
-      added,
-      removed
-    })
-  }
-  return data
-}
-
-const startDate = parseISO('2023-06-01')
-const graphData = generateData(startDate, 365)
-
-export default function OperatorsOverTime(): JSX.Element {
+export default function OperatorsOverTime({data}:{data:any}): JSX.Element {
   const chartData = {
-    labels: graphData.map((d) => d.date),
+    labels: data.map((d:any) => d.event_date),
     datasets: [
       {
         label: 'Amount Of Operators',
-        data: graphData.map((d) => d.operators),
+        data: data.map((d:any) => d.cumulative_net_additions),
         borderColor: 'rgb(59, 130, 246)',
         backgroundColor: 'rgba(59, 130, 246, 0.5)',
         tension: 0.1,
+        
       },
       {
         label: 'Added',
-        data: graphData.map((d) => d.added),
+        data: data.map((d:any) => d.added_count),
         borderColor: 'rgb(34, 197, 94)',
         backgroundColor: 'rgba(34, 197, 94, 0.5)',
         tension: 0.1,
       },
       {
         label: 'Removed',
-        data: graphData.map((d) => d.removed),
+        data: data.map((d:any) => d.removed_count),
         borderColor: 'rgb(239, 68, 68)',
         backgroundColor: 'rgba(239, 68, 68, 0.5)',
         tension: 0.1,
@@ -121,7 +100,7 @@ export default function OperatorsOverTime(): JSX.Element {
     },
     animation: {
       duration: 2000,
-      easing: 'easeInOutQuart',
+      easing: 'easeInOutQuart' as const,
     },
   }
 

@@ -22,27 +22,15 @@ interface DataPoint {
   momGrowth: number;
 }
 
-const data: DataPoint[] = [
-  { month: 'Jul 2023', operatorAmount: 17, momGrowth: 0 },
-  { month: 'Aug 2023', operatorAmount: 24, momGrowth: 41 },
-  { month: 'Sep 2023', operatorAmount: 36, momGrowth: 50 },
-  { month: 'Oct 2023', operatorAmount: 53, momGrowth: 47 },
-  { month: 'Nov 2023', operatorAmount: 74, momGrowth: 40 },
-  { month: 'Dec 2023', operatorAmount: 94, momGrowth: 27 },
-  { month: 'Jan 2024', operatorAmount: 151, momGrowth: 61 },
-  { month: 'Feb 2024', operatorAmount: 209, momGrowth: 38 },
-  { month: 'Mar 2024', operatorAmount: 274, momGrowth: 31 },
-  { month: 'Apr 2024', operatorAmount: 500, momGrowth: 82 },
-  { month: 'May 2024', operatorAmount: 660, momGrowth: 32 },
-  { month: 'Jun 2024', operatorAmount: 787, momGrowth: 19 },
-  { month: 'Jul 2024', operatorAmount: 957, momGrowth: 22 },
-  { month: 'Aug 2024', operatorAmount: 975, momGrowth: 2 },
-];
 
-export default function MomGraph(): JSX.Element {
+export default function MomGraph({data,title}:{data:any[],title:string}): JSX.Element {
   const [hoveredBar, setHoveredBar] = useState<number | null>(null);
-
-  return (
+  const dataKey = title === 'Operators' ? 'cumulative_validators' : 'total_net_additions';
+  const formattedData = data.map((item) => ({
+    ...item,
+    mom_growth_percentage : Number(item.mom_growth_percentage).toFixed(2),
+    month: title === 'Operators' ? item.month.split(' ')[0] : item.month // Only keep date part
+  }));  return (
     <main>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -50,9 +38,9 @@ export default function MomGraph(): JSX.Element {
         transition={{ duration: 0.5 }}
         className="bg-gray-900 p-6 rounded-lg max-w-4xl mx-auto"
       >
-        <h2 className="text-blue-400 text-2xl font-bold mb-4">Operators Growth MoM</h2>
+        <h2 className="text-blue-400 text-2xl font-bold mb-4">{title} Growth MoM</h2>
         <ResponsiveContainer width="100%" height={400}>
-          <ComposedChart data={data}>
+          <ComposedChart data={formattedData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
             <XAxis dataKey="month" stroke="#9CA3AF" />
             <YAxis yAxisId="left" stroke="#9CA3AF" />
@@ -65,7 +53,7 @@ export default function MomGraph(): JSX.Element {
             <Legend wrapperStyle={{ color: '#9CA3AF' }} />
             <Bar
               yAxisId="left"
-              dataKey="operatorAmount"
+              dataKey={dataKey}
               fill="#3B82F6"
               radius={[4, 4, 0, 0]}
               onMouseEnter={(_, index) => setHoveredBar(index)}
@@ -83,7 +71,7 @@ export default function MomGraph(): JSX.Element {
             <Line
               yAxisId="right"
               type="monotone"
-              dataKey="momGrowth"
+              dataKey="mom_growth_percentage"
               stroke="#EF4444"
               strokeWidth={2}
               dot={{ fill: '#EF4444', r: 4 }}

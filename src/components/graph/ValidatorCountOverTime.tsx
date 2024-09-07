@@ -48,7 +48,7 @@ const generateData = (startDate: Date, days: number): DataPoint[] => {
 const startDate = parseISO('2023-06-01')
 const graphData = generateData(startDate, 365)
 
-export default function ValidatorCountOverTime(): JSX.Element {
+export default function ValidatorCountOverTime({data}:{data:any[]}): JSX.Element {
   const [hoveredPoint, setHoveredPoint] = useState<DataPoint | null>(null)
   const [animationProgress, setAnimationProgress] = useState<number>(0)
   const chartRef = useRef<any>(null)
@@ -144,7 +144,7 @@ export default function ValidatorCountOverTime(): JSX.Element {
     },
     animation: {
       duration: 2000,
-      easing: 'easeInOutQuart',
+      easing: 'linear' as const,
     },
   }
 

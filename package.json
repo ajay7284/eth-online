@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.11.8",
+    "@duneanalytics/client-sdk": "^0.2.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.0.2",
     "@mui/material": "^6.0.2",
     "@nextui-org/react": "^2.4.6",
+    "@types/aos": "^3.0.7",
     "@visx/axis": "^3.10.1",
     "@visx/curve": "^3.3.0",
     "@visx/gradient": "^3.3.0",

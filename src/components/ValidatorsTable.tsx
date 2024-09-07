@@ -34,7 +34,7 @@ export default function ValidatorsTable() {
       
       <Table
         aria-label="Validators table"
-        css={{
+        style={{
           height: "auto",
           minWidth: "100%",
           backgroundColor: "#0D1A2D",
