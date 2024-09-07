@@ -25,6 +25,7 @@
     "aos": "^2.3.4",
     "chart.js": "^4.4.4",
     "class-variance-authority": "^0.7.0",
+    "clipboard-copy": "^4.0.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.5.4",

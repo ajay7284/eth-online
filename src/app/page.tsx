@@ -6,19 +6,19 @@ import ValidatorsTable from "@/components/ValidatorsTable";
 
 export default function Home() {
   return (
-   <div
-    style={{
-   backgroundColor:"#1D1454",
-   width:"100%",
-   height:"100%"
-  }}
-  >
-    <Navbar/>
-    <Hero/>
-    <div className='flex mt-[20px]'>
-      <DataTable/>
-      <ValidatorsTable/>
+    <div className="min-h-screen bg-[#1D1454] text-black">
+      <Navbar />
+      <Hero />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="w-full lg:w-1/2">
+            <DataTable />
+          </div>
+          <div className="w-full lg:w-1/2">
+            <ValidatorsTable />
+          </div>
+        </div>
       </div>
-   </div>
+    </div>
   );
 }

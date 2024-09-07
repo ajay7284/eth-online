@@ -1,107 +1,132 @@
-"use client"
-import React from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@nextui-org/react";
-import { useEffect } from "react";
-import AOS from 'aos';
-
-const operators = [
-  {
-    id: 990,
-    name: "P2P_org Bitge...",
-    logo: "https://link.to.logo/p2p.png",
-    validators: 500,
-  },
-  {
-    id: 991,
-    name: "P2P_org Bitge...",
-    logo: "https://link.to.logo/p2p.png",
-    validators: 500,
-  },
-  {
-    id: 992,
-    name: "P2P_org Bitge...",
-    logo: "https://link.to.logo/p2p.png",
-    validators: 500,
-  },
-  {
-    id: 993,
-    name: "P2P_org Bitge...",
-    logo: "https://link.to.logo/p2p.png",
-    validators: 500,
-  },
-  {
-    id: 817,
-    name: "Swell X Kiln ...",
-    logo: "https://link.to.logo/swell.png",
-    validators: 500,
-  },
-  {
-    id: 818,
-    name: "Swell X Kiln ...",
-    logo: "https://link.to.logo/swell.png",
-    validators: 500,
-  },
-];
+"use client";
+import { useState, useEffect } from "react";
+import {
+  CheckCircleIcon,
+  CopyIcon,
+  CheckIcon,
+  XCircleIcon,
+} from "lucide-react";
+import copy from "clipboard-copy";
 
 export default function DataTable() {
-    useEffect(() => {
-        AOS.init({ duration: 1000 }); // Initialize AOS with desired options
-      }, []);
+  const [operators, setOperators] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [copiedStates, setCopiedStates] = useState({});
+
+  useEffect(() => {
+    fetchOperators();
+  }, []);
+
+  const fetchOperators = async () => {
+    try {
+      const response = await fetch("/api/get-data-operators");
+      if (!response.ok) {
+        throw new Error("Failed to fetch operators");
+      }
+      const data = await response.json();
+      // Extracting only relevant fields: name, owner_address, validators, status
+      const formattedData = data.operators.map((operator) => ({
+        name: operator.name,
+        owner_address: operator.owner_address,
+        validators: operator.validators_count,
+        status: operator.status === "Active" ? "Active" : "Inactive",
+        logo: operator.logo,
+      }));
+      setOperators(formattedData);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  const handleCopy = (text, field, index) => {
+    copy(text);
+    setCopiedStates({ ...copiedStates, [`${field}-${index}`]: true });
+    setTimeout(() => {
+      setCopiedStates({ ...copiedStates, [`${field}-${index}`]: false });
+    }, 2000);
+  };
+
+  if (loading) return <div className="text-white">Loading...</div>;
+  if (error) return <div className="text-red-500">Error: {error}</div>;
+
   return (
-    <div className="bg-[rgba(249,250,251,0.1)] p-4 w-[40%] ml-[10%] rounded-lg"
-    data-aos="fade-right" // Apply AOS fade-left animation
-    data-aos-duration="1000" // Optional: Adjust the duration of the animation
-    >
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-white">Operators</h2>
-        <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 active:bg-blue-700 active:scale-95">
-          View More
-        </button>
-      </div>
-      
-      <Table
-        aria-label="Operators table"
-        css={{
-          height: "auto",
-          minWidth: "100%",
-          backgroundColor: "#0D1A2D",
-        }}
-        selectionMode="none"
-      >
-        <TableHeader>
-          <TableColumn>
-            <span className="text-white mr-[250px]">Name Operator</span>
-          </TableColumn>
-          <TableColumn>
-            <span className="text-white">Validators</span>
-          </TableColumn>
-        </TableHeader>
-        <TableBody items={operators}>
-          {(item) => (
-            <TableRow key={item.id} 
-            className="hover:bg-[rgba(255,255,255,0.05)] cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-              <TableCell className="py-2">
-                <div className="flex items-center space-x-4">
-                  <div className="w-[40px] h-[40px] overflow-hidden rounded-md shadow-lg transition-transform duration-300 hover:scale-110">
+    <div className="bg-gray-900 text-gray-100 p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">Operators</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full">
+          <thead>
+            <tr className="border-b border-gray-700">
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
+                Name
+              </th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
+                Owner
+              </th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
+                Validators
+              </th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {operators.map((operator, index) => (
+              <tr
+                key={index}
+                className="border-b border-gray-800 hover:bg-gray-800"
+              >
+                <td className="py-3 px-4 text-sm">
+                  {" "}
+                  <div className="flex items-center space-x-2">
+                    {/* Image before the operator name */}
                     <img
-                      src='/image/bg3.jpg'
-                      alt={item.name}
-                      className="w-full h-full object-cover"
+                      src={operator.logo || '/icons/logo.png'} // Assuming the operator object has a logo URL
+                      alt={`${operator.name} logo`}
+                      className="w-6 h-6 rounded-full"
                     />
+                    {/* Operator name */}
+                    <span >{operator.name}</span>
                   </div>
-                  <div>
-                    <p className="text-white font-semibold">{item.name}</p>
-                    <p className="text-gray-400">ID: {item.id}</p>
+                </td>
+                <td className="py-3 px-4 text-sm">
+                  <div className="flex items-center space-x-2">
+                    <span className="bg-blue-900 text-blue-300 py-1 px-2 rounded-full">
+                      {operator.owner_address.slice(0, 6)}...
+                      {operator.owner_address.slice(-4)}
+                    </span>
+                    <button
+                      onClick={() =>
+                        handleCopy(operator.owner_address, "owner", index)
+                      }
+                      className="text-gray-400 hover:text-gray-200 transition-colors"
+                    >
+                      {copiedStates[`owner-${index}`] ? (
+                        <CheckIcon className="w-4 h-4" />
+                      ) : (
+                        <CopyIcon className="w-4 h-4" />
+                      )}
+                    </button>
                   </div>
-                </div>
-              </TableCell>
-              <TableCell>
-                <span className="text-white ml-[30px]">{item.validators}</span>
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+                </td>
+                <td className="py-3 px-4 text-sm">
+                  {operator.validators}
+                </td>
+                <td className="py-3 px-4">
+                  {operator.status === "Active" ? (
+                    <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                  ) : (
+                    <XCircleIcon className="w-5 h-5 text-red-500" />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
