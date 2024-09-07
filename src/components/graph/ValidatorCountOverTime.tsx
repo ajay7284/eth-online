@@ -15,18 +15,20 @@ import {
 } from 'chart.js'
 import { format, parseISO, addDays } from 'date-fns'
 
-ChartJS.register(
-  CategoryScale,  
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-)
+// Register chart components
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-const generateData = (startDate, days) => {
-  let data = []
+// Type for the data point
+interface DataPoint {
+  date: string
+  validators: number
+  added: number
+  removed: number
+}
+
+// Generate mock data function
+const generateData = (startDate: Date, days: number): DataPoint[] => {
+  let data: DataPoint[] = []
   let validators = 1000
   for (let i = 0; i < days; i++) {
     const date = addDays(startDate, i)
@@ -37,7 +39,7 @@ const generateData = (startDate, days) => {
       date: format(date, 'yyyy-MM-dd'),
       validators,
       added,
-      removed
+      removed,
     })
   }
   return data
@@ -46,12 +48,12 @@ const generateData = (startDate, days) => {
 const startDate = parseISO('2023-06-01')
 const graphData = generateData(startDate, 365)
 
+export default function ValidatorCountOverTime(): JSX.Element {
+  const [hoveredPoint, setHoveredPoint] = useState<DataPoint | null>(null)
+  const [animationProgress, setAnimationProgress] = useState<number>(0)
+  const chartRef = useRef<any>(null)
 
-export default function ValidatorCountOverTime() {
-  const [hoveredPoint, setHoveredPoint] = useState(null)
-  const [animationProgress, setAnimationProgress] = useState(0)
-  const chartRef = useRef(null)
-
+  // Trigger animation on mount
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimationProgress(1)
@@ -59,6 +61,7 @@ export default function ValidatorCountOverTime() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Chart data
   const chartData = {
     labels: graphData.map(d => d.date),
     datasets: [
@@ -89,6 +92,7 @@ export default function ValidatorCountOverTime() {
     ],
   }
 
+  // Chart options
   const options = {
     responsive: true,
     interaction: {
@@ -144,7 +148,8 @@ export default function ValidatorCountOverTime() {
     },
   }
 
-  const handleHover = (event, elements) => {
+  // Handle hover on chart
+  const handleHover = (event: any, elements: any) => {
     if (elements && elements.length > 0) {
       const dataIndex = elements[0].index
       setHoveredPoint(graphData[dataIndex])
@@ -168,7 +173,7 @@ export default function ValidatorCountOverTime() {
               ...chartData,
               datasets: chartData.datasets.map(dataset => ({
                 ...dataset,
-                data: dataset.data.map((value, index) => 
+                data: dataset.data.map((value, index) =>
                   index <= graphData.length * animationProgress ? value : null
                 ),
               })),
@@ -203,4 +208,3 @@ export default function ValidatorCountOverTime() {
     </div>
   )
 }
-// Todo-check this Graph later

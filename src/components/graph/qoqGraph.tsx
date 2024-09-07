@@ -1,10 +1,28 @@
-"use client"
+'use client'
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ComposedChart, ResponsiveContainer } from 'recharts'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  Line,
+  ComposedChart,
+  ResponsiveContainer,
+} from 'recharts'
 
-const data = [
+// Define types for the data structure
+interface DataPoint {
+  quarter: string
+  operatorsAmount: number
+  qoqGrowth: number
+}
+
+const data: DataPoint[] = [
   { quarter: 'Q2-23', operatorsAmount: 9, qoqGrowth: 0 },
   { quarter: 'Q3-23', operatorsAmount: 36, qoqGrowth: 800 },
   { quarter: 'Q4-23', operatorsAmount: 99, qoqGrowth: 175 },
@@ -13,7 +31,14 @@ const data = [
   { quarter: 'Q3-24', operatorsAmount: 958, qoqGrowth: 45 },
 ]
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+// Define types for the tooltip props
+interface CustomTooltipProps {
+  active?: boolean
+  payload?: any[]
+  label?: string
+}
+
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <motion.div
@@ -31,7 +56,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null
 }
 
-export default function qoqGraph() {
+export default function QoqGraph(): JSX.Element {
   const [hoveredBar, setHoveredBar] = useState<number | null>(null)
 
   return (
@@ -60,7 +85,7 @@ export default function qoqGraph() {
           >
             {data.map((_, index) => (
               <motion.rect
-                key={`bar-${index}`}  // Corrected key
+                key={`bar-${index}`}
                 initial={{ scaleY: 0 }}
                 animate={{
                   scaleY: 1,

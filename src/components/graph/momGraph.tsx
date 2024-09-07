@@ -2,9 +2,27 @@
 import Image from "next/image";
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ComposedChart, ResponsiveContainer } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  Line,
+  ComposedChart,
+  ResponsiveContainer,
+} from 'recharts';
 
-const data = [
+// Define the data structure
+interface DataPoint {
+  month: string;
+  operatorAmount: number;
+  momGrowth: number;
+}
+
+const data: DataPoint[] = [
   { month: 'Jul 2023', operatorAmount: 17, momGrowth: 0 },
   { month: 'Aug 2023', operatorAmount: 24, momGrowth: 41 },
   { month: 'Sep 2023', operatorAmount: 36, momGrowth: 50 },
@@ -21,7 +39,7 @@ const data = [
   { month: 'Aug 2024', operatorAmount: 975, momGrowth: 2 },
 ];
 
-export default function momGraph() {
+export default function MomGraph(): JSX.Element {
   const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 
   return (
@@ -55,7 +73,7 @@ export default function momGraph() {
             >
               {data.map((_, index) => (
                 <motion.rect
-                  key={`bar-${index}`} // Corrected template literal usage
+                  key={`bar-${index}`}
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: hoveredBar === index ? 1.05 : 1 }}
                   transition={{ duration: 0.3 }}
