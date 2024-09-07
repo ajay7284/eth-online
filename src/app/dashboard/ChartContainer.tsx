@@ -9,6 +9,7 @@ import { set } from 'date-fns';
 import { get } from 'http';
 import React from 'react'
 import { useState,useEffect } from 'react'
+import FailTxRadarGraph from '@/components/graph/FailTxRadarGraph'
 
 export default function ChartContainer() {
 const [operators, setOperators] = useState<any>(null);
@@ -68,12 +69,13 @@ getdata();
     </div>
     <div className="flex gap-6">
       {/* {console.log(operatorOvertime.result.rows)} */}
-        <div className="flex-1  p-4 ">
-          {operatorOvertime  ? (<OperatorsOverTime data={operatorOvertime} />):(<p>Loading data...</p>)}
-      </div>
       <div className="flex-1  p-4 ">
-       {validatorOvertime ? ( <OperatorsOverTime data={validatorOvertime} />):(<p>Loading data...</p>)}
+       {validatorOvertime ? ( <OperatorsOverTime data={validatorOvertime} title='Validators'/>):(<p>Loading data...</p>)}
       </div>
+        <div className="flex-1  p-4 ">
+          {operatorOvertime  ? (<OperatorsOverTime data={operatorOvertime} title='Operators' />):(<p>Loading data...</p>)}
+      </div>
+     
       </div>
       <div className="flex gap-6">
       <div className="flex-1  p-4 ">
@@ -83,6 +85,11 @@ getdata();
         <ValidatorRadarChart/>
         </div>
     </div>
+    <div className="flex gap-6">
+    <div className="flex-1  p-4 ">
+        <FailTxRadarGraph/>
+        </div>
+      </div>
     </>
   );
   

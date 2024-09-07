@@ -34,7 +34,7 @@ interface DataPoint {
   removed: number;
 }
 
-export default function OperatorsOverTime({data}:{data:any}): JSX.Element {
+export default function OperatorsOverTime({data,title}:{data:any,title:string}): JSX.Element {
   const chartData = {
     labels: data.map((d:any) => d.event_date),
     datasets: [
@@ -106,7 +106,7 @@ export default function OperatorsOverTime({data}:{data:any}): JSX.Element {
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-gray-900 p-6 rounded-lg shadow-xl">
-      <h2 className="text-2xl font-bold text-blue-400 mb-4">Amount of Operators Over Time</h2>
+      <h2 className="text-2xl font-bold text-blue-400 mb-4">Amount of {title} Over Time</h2>
       <div className="relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

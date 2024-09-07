@@ -74,14 +74,6 @@ function groupClustersByOperatorIdsLength(clusters:any[]) {
 console.log('groups:', groups);
   return groups;
 }
-  
-const initialData: ClusterGroup[] = [
-  { id: 1, operatorCount: 4, clusterCount: 10, x: 25, y: 25 },
-  { id: 2, operatorCount: 7, clusterCount: 1, x: 75, y: 25 },
-  { id: 3, operatorCount: 11, clusterCount: 25, x: 25, y: 75 },
-  { id: 4, operatorCount: 20, clusterCount: 5, x: 75, y: 75 },
-]
-
 const colors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3']
 
 export default function ClusterGraph() {
@@ -142,7 +134,7 @@ export default function ClusterGraph() {
   const maxClusterCount = Math.max(...data.map(d => d.clusterCount));
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4">
+    <div className="w-full max-w-3xl mx-auto p-4  ">
       <h2 className="text-2xl font-bold mb-4 text-center">Interactive Cluster Distribution</h2>
       <div ref={containerRef} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
         {data.map((item, index) => {
@@ -166,8 +158,8 @@ export default function ClusterGraph() {
               onClick={() => setSelectedBubble(item)}
             >
               <div className="text-white text-center">
-                <div className="font-bold text-xs sm:text-sm md:text-base">{item.operatorCount} clusters</div>
-                <div className="text-xs sm:text-sm md:text-base">{item.clusterCount} ops</div>
+                <div className="font-bold text-xs sm:text-sm md:text-base">{item.operatorCount} ops</div>
+                <div className="text-xs sm:text-sm md:text-base">{item.clusterCount} clusters</div>
               </div>
             </div>
           );
