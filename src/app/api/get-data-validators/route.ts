@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(req: NextRequest) {
   try {
     // Fetching data from the provided API
-    const response = await fetch('https://api.ssv.network/api/v4/mainnet/validators?lastId=1&perPage=10&ordering=status');
+    const response = await fetch('https://api.ssv.network/api/v4/mainnet/validators?lastId=1&perPage=35&ordering=status');
 
     // Check if the request was successful
     if (!response.ok) {
