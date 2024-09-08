@@ -17,26 +17,41 @@ export default function ChartContainer() {
   const [validators, setValidators] = useState<any>(null)
   const [operatorOvertime, setOperatorovertime] = useState<any>(null)
   const [validatorOvertime, setValidatorovertime] = useState<any>(null)
-
-  const getdata = async () => {
+  const getdata = async (retryCount = 3, delay = 2000) => {
     try {
-      const [growthData, overtimeData] = await Promise.all([
-        fetch('/api/get-dune-growthdata').then(res => res.json()),
-        fetch('/api/get-dune-overtime').then(res => res.json())
-      ])
-
-      setOperators(growthData.operators)  
-      setValidators(growthData.validator)
-      setOperatorovertime(overtimeData.operators_overtime.result.rows.reverse())
-      setValidatorovertime(overtimeData.validator_overtime.result.rows.reverse())
+      const [growthDataResponse, overtimeDataResponse] = await Promise.all([
+        fetch('/api/get-dune-growthdata'),
+        fetch('/api/get-dune-overtime')
+      ]);
+  
+      // If the first response is 429, retry after delay
+      if (growthDataResponse.status === 429 || overtimeDataResponse.status === 429) {
+        if (retryCount > 0) {
+          console.warn(`Rate limit hit, retrying after ${delay}ms...`);
+          setTimeout(() => getdata(retryCount - 1, delay * 2), delay);  // Exponential backoff
+          return;
+        } else {
+          console.error('Exceeded retry limit. Please try again later.');
+          return;
+        }
+      }
+  
+      const growthData = await growthDataResponse.json();
+      const overtimeData = await overtimeDataResponse.json();
+  
+      setOperators(growthData.operators);
+      setValidators(growthData.validator);
+      setOperatorovertime(overtimeData.operators_overtime.result.rows.reverse());
+      setValidatorovertime(overtimeData.validator_overtime.result.rows.reverse());
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Error fetching data:', error);
     }
-  }
-
+  };
+  
   useEffect(() => {
-    getdata()
-  }, [])
+    getdata();
+  }, []);
+  
 
   return (
     <div className="space-y-6">
