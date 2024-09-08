@@ -12,6 +12,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions
 } from 'chart.js'
 import { format, parseISO } from 'date-fns'
 
@@ -66,7 +67,7 @@ export default function OperatorsOverTime({ data, title }: { data: DataPoint[], 
     ],
   }
 
-  const options = {
+  const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
