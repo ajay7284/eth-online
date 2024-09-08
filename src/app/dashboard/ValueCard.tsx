@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from "react"
-
+import CountUp from 'react-countup'
 interface Product {
   type: string
   value: number | undefined
@@ -57,7 +57,7 @@ export default function ValueCard() {
     return Array(6).fill(null).map((_, index) => (
       <div 
         key={`skeleton-${index}`}
-        className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col justify-between"
+        className="rounded-lg shadow-md p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col justify-between w-[210px] h-[160px]" // Match dimensions here
       >
         <div className="skeleton-loader h-4 w-3/4 mb-2"></div>
         <div className="skeleton-loader h-6 w-1/2"></div>
@@ -83,17 +83,18 @@ export default function ValueCard() {
           border-radius: 4px;
         }
       `}</style>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 ">
         {isLoading ? renderSkeletons() : (
           products.map((product, index) => (
             <div 
               key={index}
-              className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col justify-between"
+              className="bg-[rgba(249,250,251,0.1)]  ml-[22px] rounded-lg shadow-md py-4 pl-4 w-[210px] transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col justify-between"
             >
-              <h3 className="font-semibold text-sm mb-2 flex-grow">{product.type}</h3>
-              <p className="text-lg font-bold text-primary">
-                {product.value !== undefined ? Number(product.value).toFixed(2) : 'N/A'}
-              </p>
+              <h3 className="font-semibold text-white text-sm mb-2 flex-grow">{product.type}</h3>
+              <p className="text-lg font-bold text-white text-primary">
+              {product.value !== undefined ? (
+                  <CountUp start={0} end={product.value} duration={2.5} separator="," />
+                ) : '0'}              </p>
             </div>
           ))
         )}

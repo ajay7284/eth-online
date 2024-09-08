@@ -178,8 +178,8 @@ export default function ClusterGraph() {
               key={item.id}
               className="absolute rounded-full flex items-center justify-center cursor-move transition-shadow duration-300 hover:shadow-lg"
               style={{
-                width: `${size}%`,
-                height: `${size}%`,
+                width: `${Math.max(size, 20)}%`, // Ensure a minimum size of 20% for the bubble
+                height: `${Math.max(size, 20)}%`, // Ensure a minimum size of 20% for the bubble
                 left: `${item.x}%`,
                 top: `${item.y}%`,
                 backgroundColor: colors[index % colors.length],

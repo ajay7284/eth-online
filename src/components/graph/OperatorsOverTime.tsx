@@ -121,7 +121,7 @@ export default function OperatorsOverTime({ data, title }: { data: DataPoint[], 
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-opacity-30 bg-purple-900 p-6 rounded-lg shadow-xl backdrop-blur-sm">
+    <div className="w-full max-w-4xl mx-auto bg-opacity-30 bg-opacity-30  bg-purple-900 p-6 rounded-lg shadow-xl backdrop-blur-sm">
       <h2 className="text-2xl font-bold text-teal-300 mb-4">Amount of {title} Over Time</h2>
       <div className="relative h-[400px]">
         <motion.div

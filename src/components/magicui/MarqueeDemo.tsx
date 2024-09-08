@@ -17,13 +17,19 @@ const DataCard = ({
 }) => {
   return (
     <figure
-      className={cn(
-        "relative w-64 h-[160px] cursor-pointer overflow-hidden rounded-xl border p-4 shadow-2xl bg-[rgba(249,250,251,0.1)] ",
-        // light styles
-        "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
-        // dark styles
-        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
-      )}
+    className={cn(
+      "relative w-64 h-[160px] cursor-pointer overflow-hidden rounded-xl p-4 bg-[rgba(0,0,0,0.5)]",
+      "transition-all duration-300 ease-in-out",
+      "border border-transparent",
+      // Subtle glow effect by default
+      "shadow-[0_0_5px_2px_rgba(21,193,225,0.3)]",
+      // Enhanced glow effect on hover
+      "hover:shadow-[0_0_15px_5px_rgba(21,193,225,0.7)]"
+    )}
+    style={{
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+    }}
     >
      
       <div className="flex justify-center items-center h-full w-full flex-col">
@@ -38,11 +44,10 @@ const DataCard = ({
           {/* Smooth number animation */}
           <CountUp start={0} end={value} duration={2.5} separator="," />
         </h1>        <h1
-          className="text-white  text-bold text-md"
+          className="text-green-300  text-bold text-md"
           style={{
             fontSize: "18px",
             fontWeight: "bold",
-            color:"#15C1E1"
           }}
         >
           {type}
@@ -93,7 +98,7 @@ console.log(validatorData)
   ];
   
   return (
-    <div className="relative flex h-[250px] w-[80%] ml-[0%] items-center mt-[30px] overflow-hidden bg-background ">
+    <div className="relative flex h-[250px] w-[100%] ml-[0%] items-center mt-[30px] overflow-hidden bg-background ">
     <Marquee pauseOnHover className="[--duration:20s]">
       {data.map((item) => (
         <DataCard key={item.type} {...item} />
