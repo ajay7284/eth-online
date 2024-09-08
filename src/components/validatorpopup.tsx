@@ -35,9 +35,9 @@ const Tooltip = ({ children, content }: { children: React.ReactNode; content: st
         {children}
       </div>
       {isVisible && (
-        <div className="absolute z-50 px-2 py-1 text-xs font-medium text-white bg-gray-700 rounded-md shadow-lg -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+        <div className="absolute mt-3 ml-8 z-50 px-2 py-1 text-xs font-medium text-white bg-gray-700 rounded-md shadow-lg -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
           {content}
-          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-700 rotate-45"></div>
+          {/* <div className="absolute  w-2 h-2 bg-gray-700 rotate-45 -top-3 left-1/2 transform -translate-x-1/2"></div> */}
         </div>
       )}
     </div>
@@ -64,7 +64,7 @@ export default function OperatorInfovalidator({
   };
 
   return (
-    <div className="bg-gray-900 text-white rounded-lg w-full p-6">
+    <div className="bg-gray-900 text-white rounded-lg w-full p-6" >
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold">Validator</h2>
       </div>
@@ -96,10 +96,6 @@ export default function OperatorInfovalidator({
           <span className="font-medium text-gray-400">Owner</span>
           <span className="col-span-3 break-words">{owner}</span>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <span className="font-medium text-gray-400">Balance</span>
-          <span className="col-span-3 break-words">{balance}</span>
-        </div>
       </div>
       <div>
         <h3 className="text-2xl font-bold mb-4">Operators</h3>
@@ -108,10 +104,12 @@ export default function OperatorInfovalidator({
             <div key={operator.id} className="bg-gray-800 rounded-lg overflow-hidden">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <Tooltip content={operator.status}>
-                    <div className={`w-4 h-4 rounded-full ${getDotColor(operator.status)}`}></div>
-                  </Tooltip>
-                  <span className="text-xs text-gray-400">ID: {operator.id}</span>
+                  <div className="flex items-center">
+                    <Tooltip content={operator.status}>
+                      <div className={`w-3 h-3 rounded-full ${getDotColor(operator.status)} mr-2 cursor-help`}></div>
+                    </Tooltip>
+                    <span className="text-xs text-gray-400">ID: {operator.id}</span>
+                  </div>
                 </div>
                 <h4 className="text-sm mb-2 truncate">{operator.name}</h4>
                 <Tooltip content="Performance 24H">

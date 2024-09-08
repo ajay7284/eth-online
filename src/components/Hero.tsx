@@ -26,7 +26,7 @@ export default function Hero() {
           padding: '30px 100px ', // Add padding for a cleaner look
           borderRadius: '2rem', // Optional: Rounded corners for the background
           maxWidth: '100%',
-          zIndex:"111", // Limit the width of the container
+          zIndex:"11", // Limit the width of the container
         }}
         className="flex flex-col justify-center items-center mt-[100px]"
       >
