@@ -6,33 +6,40 @@ import NumberTickerDemo from "./NumberTickerDemo";
 import { url } from "inspector";
 
 
-const DataCard = ({ type, value,days }: { type: string; value: number ,days:string}) => {
+const DataCard = ({
+  type,
+  value,
+  days,
+}: {
+  type: string;
+  value: number;
+  days: string;
+}) => {
   return (
     <figure
-    className={cn(
-      "relative w-64 h-[160px] cursor-pointer overflow-hidden rounded-xl border p-4 shadow-2xl bg-[rgba(249,250,251,0.1)] ",
-      // light styles
-      "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
-      // dark styles
-      "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
-    )}
-  >
-   
-    <div className="flex justify-center items-center h-full w-full flex-col">
-      <NumberTickerDemo value={value} />
-      <h1
-        className="text-white  text-bold text-md"
-        style={{
-          fontSize: "18px",
-          fontWeight: "bold",
-          color:"#15C1E1"
-        }}
-      >
-        {type}
-      </h1>
-    </div>
-  </figure>
-
+      className={cn(
+        "relative w-64 h-[160px] cursor-pointer overflow-hidden rounded-xl border p-4 shadow-2xl bg-[rgba(249,250,251,0.1)] ",
+        // light styles
+        "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
+        // dark styles
+        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
+      )}
+    >
+     
+      <div className="flex justify-center items-center h-full w-full flex-col">
+        <NumberTickerDemo value={value} />
+        <h1
+          className="text-white  text-bold text-md"
+          style={{
+            fontSize: "18px",
+            fontWeight: "bold",
+            color:"#15C1E1"
+          }}
+        >
+          {type}
+        </h1>
+      </div>
+    </figure>
   );
 };
 

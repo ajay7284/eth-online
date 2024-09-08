@@ -64,8 +64,19 @@ export default function ValidatorsTable() {
     return validators.slice(startIndex, endIndex)
   }
 
-  if (loading) return <div className="text-white">Loading...</div>
-  if (error) return <div className="text-red-500">Error: {error}</div>
+  const TableSkeleton = () => (
+    <div className="animate-pulse">
+      <div className="h-8 bg-gray-700 rounded mb-4"></div>
+      {[...Array(itemsPerPage)].map((_, index) => (
+        <div key={index} className="flex space-x-4 mb-4">
+          <div className="h-6 bg-gray-700 rounded w-1/4"></div>
+          <div className="h-6 bg-gray-700 rounded w-1/4"></div>
+          <div className="h-6 bg-gray-700 rounded w-1/4"></div>
+          <div className="h-6 bg-gray-700 rounded w-1/4"></div>
+        </div>
+      ))}
+    </div>
+  )
 
   const paginatedValidators = getPaginatedData()
 
@@ -73,55 +84,61 @@ export default function ValidatorsTable() {
     <div className="bg-[rgba(249,250,251,0.1)] w-[700px] h-[730px] ml-[25px] text-gray-100 p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Validators</h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full">
-          <thead>
-            <tr className="border-b border-gray-700">
-              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Public Key</th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Owner</th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Cluster</th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedValidators.map((validator:any, index:any) => (
-              <tr key={index} className="border-b border-gray-800 hover:bg-gray-800">
-                <td 
-                  className="py-3 px-4 text-sm cursor-pointer hover:underline"
-                  onClick={() => openModal(validator)}
-                >
-                  {validator.public_key.slice(0, 10)}...{validator.public_key.slice(-4)}
-                </td>
-                <td className="py-3 px-4 text-sm">
-                  <div className="flex items-center space-x-2">
-                    <span 
-                      className="bg-blue-900 text-blue-300 py-1 px-2 rounded-full cursor-default"
-                    >
-                      {validator.owner_address.slice(0, 6)}...{validator.owner_address.slice(-4)}
-                    </span>
-                    <button
-                      onClick={() => handleCopy(validator.owner_address, 'owner', index)}
-                      className="text-gray-400 hover:text-gray-200 transition-colors"
-                    >
-                      {copiedStates[`owner-${index}`] ? (
-                        <CheckIcon className="w-4 h-4" />
-                      ) : (
-                        <CopyIcon className="w-4 h-4" />
-                      )}
-                    </button>
-                  </div>
-                </td>
-                <td className="py-3 px-4 text-sm">{validator.cluster.slice(0, 6)}...{validator.cluster.slice(-4)}</td>
-                <td className="py-3 px-4">
-                  {validator.status === 'Active' ? (
-                    <CheckCircleIcon className="w-5 h-5 text-green-500" />
-                  ) : (
-                    <XCircleIcon className="w-5 h-5 text-red-500" />
-                  )}
-                </td>
+        {loading ? (
+          <TableSkeleton />
+        ) : error ? (
+          <div className="text-red-500">Error: {error}</div>
+        ) : (
+          <table className="min-w-full">
+            <thead>
+              <tr className="border-b border-gray-700">
+                <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Public Key</th>
+                <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Owner</th>
+                <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Cluster</th>
+                <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {paginatedValidators.map((validator:any, index:any) => (
+                <tr key={index} className="border-b border-gray-800 hover:bg-gray-800">
+                  <td 
+                    className="py-3 px-4 text-sm cursor-pointer hover:underline"
+                    onClick={() => openModal(validator)}
+                  >
+                    {validator.public_key.slice(0, 10)}...{validator.public_key.slice(-4)}
+                  </td>
+                  <td className="py-3 px-4 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <span 
+                        className="bg-blue-900 text-blue-300 py-1 px-2 rounded-full cursor-default"
+                      >
+                        {validator.owner_address.slice(0, 6)}...{validator.owner_address.slice(-4)}
+                      </span>
+                      <button
+                        onClick={() => handleCopy(validator.owner_address, 'owner', index)}
+                        className="text-gray-400 hover:text-gray-200 transition-colors"
+                      >
+                        {copiedStates[`owner-${index}`] ? (
+                          <CheckIcon className="w-4 h-4" />
+                        ) : (
+                          <CopyIcon className="w-4 h-4" />
+                        )}
+                      </button>
+                    </div>
+                  </td>
+                  <td className="py-3 px-4 text-sm">{validator.cluster.slice(0, 6)}...{validator.cluster.slice(-4)}</td>
+                  <td className="py-3 px-4">
+                    {validator.status === 'Active' ? (
+                      <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <XCircleIcon className="w-5 h-5 text-red-500" />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {totalPages > 1 && (

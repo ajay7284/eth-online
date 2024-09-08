@@ -105,107 +105,124 @@ export default function DataTable() {
     return operators.slice(startIndex, endIndex)
   }
 
-  if (loading) return <div className="text-white">Loading...</div>
-  if (error) return <div className="text-red-500">Error: {error}</div>
+  const TableSkeleton = () => (
+    <div className="animate-pulse">
+      <div className="h-8 bg-gray-700 rounded mb-4"></div>
+      {[...Array(itemsPerPage)].map((_, index) => (
+        <div key={index} className="flex space-x-4 mb-4">
+          <div className="h-6 bg-gray-700 rounded w-1/4"></div>
+          <div className="h-6 bg-gray-700 rounded w-1/4"></div>
+          <div className="h-6 bg-gray-700 rounded w-1/4"></div>
+          <div className="h-6 bg-gray-700 rounded w-1/4"></div>
+        </div>
+      ))}
+    </div>
+  )
 
   const paginatedOperators = getPaginatedData()
 
   return (
-    <div className="bg-[rgba(249,250,251,0.1)]   w-[700px] h-[730px] ml-[30px]  text-gray-100 p-6 rounded-lg shadow-lg">
+    <div className="bg-[rgba(249,250,251,0.1)] w-[700px] h-[730px] ml-[30px] text-gray-100 p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Operators</h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full">
-          <thead>
-            <tr className="border-b border-gray-700">
-              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
-                Name
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
-                Owner
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
-                Validators
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedOperators.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="py-3 px-4 text-center text-gray-400">
-                  No data available
-                </td>
+        {loading ? (
+          <TableSkeleton />
+        ) : error ? (
+          <div className="text-red-500">Error: {error}</div>
+        ) : (
+          <table className="min-w-full">
+            <thead>
+              <tr className="border-b border-gray-700">
+                <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
+                  Name
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
+                  Owner
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
+                  Validators
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">
+                  Status
+                </th>
               </tr>
-            ) : (
-              paginatedOperators.map((operator, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-800 hover:bg-gray-800"
-                >
-                  <td className="py-3 px-4 text-sm">
-                    <div className="flex items-center space-x-2 relative">
-                      <img
-                        src={operator.logo || "/icons/logo.png"}
-                        alt={`${operator.name} logo`}
-                        className="w-6 h-6 rounded-full"
-                      />
-                      <span
-                        onMouseEnter={() => setHoveredOperator(operator)}
-                        onMouseLeave={() => setHoveredOperator(null)}
-                        onClick={() => openModal(operator)}
-                        className="cursor-pointer hover:underline"
-                      >
-                        {operator.name.slice(0, 6)}...{operator.name.slice(-4)}
-                      </span>
-                      {hoveredOperator === operator && (
-                        <div
-                          className="absolute left-0 top-full mt-1 p-2 bg-gray-700 text-white rounded shadow-lg z-10 transition-opacity duration-300"
-                          style={{ minWidth: "200px" }}
-                        >
-                          {operator.name}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <span className="bg-blue-900 text-blue-300 py-1 px-2 rounded-full">
-                        {operator.owner_address.slice(0, 6)}...
-                        {operator.owner_address.slice(-4)}
-                      </span>
-                      <button
-                        onClick={() =>
-                          handleCopy(operator.owner_address, "owner", index)
-                        }
-                        className="text-gray-400 hover:text-gray-200 transition-colors"
-                      >
-                        {copiedStates[`owner-${index}`] ? (
-                          <CheckIcon className="w-4 h-4" />
-                        ) : (
-                          <CopyIcon className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 text-sm">{operator.validators}</td>
-                  <td className="py-3 px-4">
-                    {operator.status === "Active" ? (
-                      <CheckCircleIcon className="w-5 h-5 text-green-500" />
-                    ) : (
-                      <XCircleIcon className="w-5 h-5 text-red-500" />
-                    )}
+            </thead>
+            <tbody>
+              {paginatedOperators.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-3 px-4 text-center text-gray-400">
+                    No data available
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                paginatedOperators.map((operator, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-800 hover:bg-gray-800"
+                  >
+                    <td className="py-3 px-4 text-sm">
+                      <div className="flex items-center space-x-2 relative">
+                        <img
+                          src={operator.logo || "/icons/logo.png"}
+                          alt={`${operator.name} logo`}
+                          className="w-6 h-6 rounded-full"
+                        />
+                        <span
+                          onMouseEnter={() => setHoveredOperator(operator)}
+                          onMouseLeave={() => setHoveredOperator(null)}
+                          onClick={() => openModal(operator)}
+                          className="cursor-pointer hover:underline"
+                        >
+                          {operator.name.slice(0, 6)}...{operator.name.slice(-4)}
+                        </span>
+                        {hoveredOperator === operator && (
+                          <div
+                            className="absolute left-0 top-full mt-1 p-2 bg-gray-700 text-white rounded shadow-lg z-10 transition-opacity duration-300"
+                            style={{ minWidth: "200px" }}
+                          >
+                            {operator.name}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <span className="bg-blue-900 text-blue-300 py-1 px-2 rounded-full">
+                          {operator.owner_address.slice(0, 6)}...
+                          {operator.owner_address.slice(-4)}
+                        </span>
+                        <button
+                          onClick={() =>
+                            handleCopy(operator.owner_address, "owner", index)
+                          }
+                          className="text-gray-400 hover:text-gray-200 transition-colors"
+                        >
+                          {copiedStates[`owner-${index}`] ? (
+                            <CheckIcon className="w-4 h-4" />
+                          ) : (
+                            <CopyIcon className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-sm">{operator.validators}</td>
+                    <td className="py-3 px-4">
+                      {operator.status === "Active" ? (
+                        <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                      ) : (
+                        <XCircleIcon className="w-5 h-5 text-red-500" />
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {totalPages > 1 && (
-        <div className="mt-4 flex justify-between items-center">
+        <div className="mt-4 flex justify-between items-center ">
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}

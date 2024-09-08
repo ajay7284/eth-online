@@ -165,13 +165,6 @@ export default function ClusterGraph() {
           );
         })}
       </div>
-      {selectedBubble && (
-        <div className="mt-4 p-4 bg-gray-200 rounded-md absolute ">
-          <h3 className="text-lg font-semibold">Selected Bubble Details</h3>
-          <p>Operator Count: {selectedBubble.operatorCount}</p>
-          <p>Cluster Count: {selectedBubble.clusterCount}</p>
-        </div>
-      )}
       <div className="mt-4 flex flex-wrap justify-center">
         {data.map((item, index) => (
           <div key={item.id} className="flex items-center mr-4 mb-2">
