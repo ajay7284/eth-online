@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Marquee from "../lib/CardUtil";
 import NumberTickerDemo from "./NumberTickerDemo";
 import { url } from "inspector";
-
+import CountUp from 'react-countup'; // Import the CountUp component for number animation
 
 const DataCard = ({
   type,
@@ -27,8 +27,17 @@ const DataCard = ({
     >
      
       <div className="flex justify-center items-center h-full w-full flex-col">
-        <NumberTickerDemo value={value} />
-        <h1
+      <h1
+          className="text-white text-bold text-md"
+          style={{
+            fontSize: "36px", // Adjust size as per your preference
+            fontWeight: "bold",
+            color: "#15C1E1",
+          }}
+        >
+          {/* Smooth number animation */}
+          <CountUp start={0} end={value} duration={2.5} separator="," />
+        </h1>        <h1
           className="text-white  text-bold text-md"
           style={{
             fontSize: "18px",
