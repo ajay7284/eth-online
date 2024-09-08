@@ -14,6 +14,7 @@ import {
   ComposedChart,
   ResponsiveContainer,
 } from 'recharts'
+import { FiInfo } from 'react-icons/fi' // Using react-icons for an info icon
 
 interface DataPoint {
   formatted_quarter: string
@@ -52,16 +53,47 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
 
 export default function QoqGraph({ data, title }: { data: DataPoint[], title: string }): JSX.Element {
   const [hoveredBar, setHoveredBar] = useState<number | null>(null)
+  const [showInfo, setShowInfo] = useState(false)
   const dataKey = title === 'Operators' ? 'cumulative_operators' : 'cumulative_validators'
+
+  const getInfoContent = () => {
+    if (title === 'Validators') {
+      return (
+        <>
+          <p><strong>Cumulative Validators:</strong> Total number of active validators in the SSV Network.</p>
+          <p><strong>QoQ Growth:</strong> Percentage change in validator count compared to the previous quarter.</p>
+        </>
+      )
+    } else {
+      return <p>This graph shows the quarter-on-quarter growth of operators and validators with percentage growth.</p>
+    }
+  }
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-opacity-30 bg-purple-900 p-6 rounded-lg max-w-4xl mx-auto backdrop-blur-sm"
+      className="relative bg-opacity-30 bg-purple-900 p-6 rounded-lg max-w-4xl mx-auto backdrop-blur-sm"
     >
       <h2 className="text-teal-300 text-2xl font-bold mb-4">{title} Growth QoQ</h2>
+
+      {/* Info Icon with Tooltip */}
+      <div className="absolute top-4 right-4">
+        <div
+          className="relative"
+          onMouseEnter={() => setShowInfo(true)}
+          onMouseLeave={() => setShowInfo(false)}
+        >
+          <FiInfo className="text-teal-300 text-2xl cursor-pointer" />
+          {showInfo && (
+            <div className="absolute right-0 mt-2 w-64 p-3 bg-gray-800 text-white rounded-lg shadow-lg text-sm z-50">
+              {getInfoContent()}
+            </div>
+          )}
+        </div>
+      </div>
+
       <ResponsiveContainer width="100%" height={400}>
         <ComposedChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />

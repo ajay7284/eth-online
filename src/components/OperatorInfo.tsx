@@ -137,13 +137,13 @@ const OperatorInfo = ({
               <InfoItem label="Linkedin" value={linkedin_url || "-"} link />
               <InfoItem 
                 label="Owner" 
-                value={`${owner_address.slice(0, 6)}...${owner_address.slice(-4)}`} 
+                value={`${owner_address?.slice(0, 6)}...${owner_address?.slice(-4)}`} 
                 copyable 
                 fullValue={owner_address}
               />
               <InfoItem 
                 label="Public Key" 
-                value={`${public_key.slice(0, 6)}...${public_key.slice(-4)}`} 
+                value={`${public_key?.slice(0, 6)}...${public_key.slice(-4)}`} 
                 copyable 
                 fullValue={public_key}
               />
@@ -161,7 +161,6 @@ const OperatorInfo = ({
             <InfoItem label="Performance 1H" value={formatPerformance(performance["1h"])} />
             <InfoItem label="Performance 24H" value={formatPerformance(performance["24h"])} />
             <InfoItem label="Performance 30D" value={formatPerformance(performance["30d"])} />
-            <div className="text-sm text-gray-400 mt-2">Updated 23m ago</div>
           </div>
         </div>
       </div>

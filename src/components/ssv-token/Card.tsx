@@ -30,7 +30,7 @@ const PriceCard = ({ productName, price }: { productName: string; price: number 
 
   return (
     <div className="p-4 bg-[rgba(249,250,251,0.1)] rounded-lg shadow-lg flex h-[120px] min-w-[250px] flex-col items-center">
-      <h2 className="text-md font-bold text-white mb-2">{productName}</h2>
+      <h2 className="text-md font-bold text-green-300  mb-2">{productName}</h2>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -105,7 +105,7 @@ const PriceDashboard = () => {
   const products = [
     { name: "SSV Price On Uniswap", price: prices.price },
     { name: "SSV Fully Diluted Valuation", price: prices.valuation },
-    { name: "SSV Uniswap Volume 7d", price: prices.sevenDayVolume },
+    { name: "7d SSV Uniswap Volume", price: prices.sevenDayVolume },
     { name: "SSV Total Supply", price: prices.supply },
   ]
 

@@ -180,11 +180,11 @@ export default function LiquidationEventsTable() {
                 <td className="p-2 border-b border-gray-700 font-mono">{item.liquidator_address}</td>
                 <td className="p-2 border-b border-gray-700">{item.operatorIds.join(', ')}</td>
                 <td
-                  className="p-2 border-b border-gray-700"
+                  className="p-2 border-b border-gray-700 hover:underline w-full"
                   dangerouslySetInnerHTML={{ __html: item.owner_link }}
                 />
                 <td
-                  className="p-2 border-b border-gray-700"
+                  className="p-2 border-b border-gray-700 hover:underline"
                   dangerouslySetInnerHTML={{ __html: item.transaction_link }}
                 />
                 <td className="p-2 border-b border-gray-700">{item.value_in_ssv.toFixed(8)}</td>

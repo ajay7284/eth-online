@@ -9,6 +9,6 @@ export async function GET(req: NextRequest) {
     const dune = new DuneClient(api);
     const ssv_holders = await dune.getLatestResult({ queryId: 2967498 });
     const ssv_treasury = await dune.getLatestResult({ queryId: 3082005 });
-   
+
     return NextResponse.json({ssv_holders, ssv_treasury});
 }
