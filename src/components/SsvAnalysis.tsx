@@ -3,7 +3,7 @@ import React from 'react'
 import Header from './ui/Header'
 import ClusterGraph from './graph/ClusterGraph'
 import ValidatorRadarChart from './graph/ValidatorMetricsRadarChart'
-import DataTable from './DataTable'
+import DataTable from './OperatorTable'
 import ValidatorsTable from './ValidatorsTable'
 import { motion } from 'framer-motion';
 import Link from 'next/link';
