@@ -1,98 +1,114 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
-import NetworkGrowth from "../dashboard/NetworkGrowth";
-import FailedTransaction from "../dashboard/FailedTransaction";
-import NetworkDistribution from "../dashboard/NetworkDistribution";
-import Liquidation from "../dashboard/Liquidation";
+'use client'
 
-// Define the type for the option objects
+import React, { useState, useRef, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ChevronDown } from "lucide-react"
+import NetworkGrowth from "../dashboard/NetworkGrowth"
+import FailedTransaction from "../dashboard/FailedTransaction"
+import NetworkDistribution from "../dashboard/NetworkDistribution"
+import Liquidation from "../dashboard/Liquidation"
+
 interface Option {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 export default function Options() {
-  // Sample options array with id and name
   const optionsArray: Option[] = [
     { id: 1, name: "Network Growth" },
     { id: 2, name: "Failed Transaction" },
     { id: 3, name: "Network Distribution" },
     { id: 4, name: "Liquidation" },
-  ];
+  ]
 
-  const [selectedOption, setSelectedOption] = useState<number>(optionsArray[0].id);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const [dropdownHeight, setDropdownHeight] = useState<number>(0);
+  const [selectedOption, setSelectedOption] = useState<number>(optionsArray[0].id)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const dropdownRef = useRef<HTMLDivElement | null>(null)
 
-  // Update the dropdown height when it opens/closes
   useEffect(() => {
-    if (dropdownRef.current) {
-      setDropdownHeight(dropdownRef.current.scrollHeight);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
     }
-  }, [isOpen]);
 
-  // Handle option click event
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
   const handleOptionClick = (id: number) => {
-    setSelectedOption(id);
-    setIsOpen(false);
-  };
+    setSelectedOption(id)
+    setIsOpen(false)
+  }
 
-  // Toggle the dropdown menu
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
-  // Conditionally render the selected component
   const renderSelectedComponent = () => {
     switch (selectedOption) {
       case 1:
-        return <NetworkGrowth />;
+        return <NetworkGrowth />
       case 2:
-        return <FailedTransaction />;
+        return <FailedTransaction />
       case 3:
-        return <NetworkDistribution />;
+        return <NetworkDistribution />
       case 4:
-        return <Liquidation />;
+        return <Liquidation />
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <>
-      <div className="w-full flex justify-end p-4"> {/* Added container for right alignment */}
-        <div className="relative inline-block text-left w-64">
-          <div
-            className="w-full py-2 px-4 bg-white border border-gray-300 rounded-lg shadow focus:outline-none focus:ring focus:border-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer flex justify-between items-center"
+      <div className="w-full flex justify-end p-4">
+        <div className="relative inline-block text-left w-64" ref={dropdownRef}>
+          <motion.div
+            className="w-full py-2 px-4 bg-opacity-20 bg-purple-900 border border-purple-600 rounded-lg shadow-lg focus:outline-none focus:ring focus:border-teal-300 transition-all duration-300 ease-in-out cursor-pointer flex justify-between items-center"
             onClick={toggleDropdown}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <span>{optionsArray.find(option => option.id === selectedOption)?.name}</span>
-            <ChevronDown className={`ml-2 h-5 w-5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-          </div>
-          <div 
-            ref={dropdownRef}
-            className={`absolute z-10 right-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}
-            style={{ maxHeight: isOpen ? `${dropdownHeight}px` : '0px' }}
-          >
-            {optionsArray.map((option) => (
-              <div
-                key={option.id}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-200"
-                onClick={() => handleOptionClick(option.id)}
+            <span className="text-white">{optionsArray.find(option => option.id === selectedOption)?.name}</span>
+            <ChevronDown className={`ml-2 h-5 w-5 text-teal-300 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+          </motion.div>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="absolute z-10 right-0 mt-1 w-full bg-purple-900 border border-purple-600 rounded-lg shadow-lg overflow-hidden"
               >
-                {option.name}
-              </div>
-            ))}
-          </div>
+                {optionsArray.map((option) => (
+                  <motion.div
+                    key={option.id}
+                    className="px-4 py-2 hover:bg-purple-800 cursor-pointer transition-colors duration-200 text-white"
+                    onClick={() => handleOptionClick(option.id)}
+                    whileHover={{ backgroundColor: "rgba(139, 92, 246, 0.3)" }}
+                  >
+                    {option.name}
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
-      {/* Render the selected component */}
-      <div className="mt-8">
+      <motion.div
+        key={selectedOption}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mt-8"
+      >
         {renderSelectedComponent()}
-      </div>
+      </motion.div>
     </>
-  );
+  )
 }
