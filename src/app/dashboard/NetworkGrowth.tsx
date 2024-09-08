@@ -46,7 +46,7 @@ export default function NetworkGrowth() {
   return (
     <div className="space-y-6">
       <ValueCard />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-[25px]">
         <div className="p-4">
          
           {validators && validators.validator_qoq?.result?.rows ? (
@@ -71,7 +71,7 @@ export default function NetworkGrowth() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-[25px]">
         <div className="p-4">
            
           {validators && validators.validator_mom?.result?.rows ? (
@@ -96,7 +96,7 @@ export default function NetworkGrowth() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-[25px]">
         <div className="p-4 ">
         
           {validatorOvertime ? (

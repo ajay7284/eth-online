@@ -12,16 +12,16 @@ export default function SsvAnalysis() {
   return (
     <div className='mt-[50px]'>
       <Header title={'Analysis of SSV Network'}/>
-      <div className='flex mt-[50px]'>
+      <div className='flex mt-[50px] mr-[25px]'>
       <ClusterGraph/>
       <ValidatorRadarChart/>
       </div>
       <div className="container mx-auto px-4 py-8 mt-[30px]">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 ">
           <div className="w-full lg:w-1/2">
             <DataTable />
           </div>
-          <div className="w-full lg:w-1/2">
+          <div className="w-full  lg:w-1/2">
             <ValidatorsTable />
           </div>
         </div>
