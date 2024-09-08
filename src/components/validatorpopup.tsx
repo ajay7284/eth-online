@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 type Operator = {
   name: string;
@@ -7,6 +7,7 @@ type Operator = {
   performance: {
     '24h': number;
   };
+  status: string;
 };
 
 type ValidatorProps = {
@@ -17,20 +18,40 @@ type ValidatorProps = {
   balance?: string;
   operators?: Operator[];
 };
-function formatPerformance(value:any) {
-    // Ensure value is a number and is not undefined or null
-    return (typeof value === 'number' && !isNaN(value)) ? value.toFixed(2) : '0.00';
-  }
 
-export default function OperatorInfovalidator({ 
-  publicKey = '', 
-  cluster = '', 
-  status = '', 
-  owner = '', 
-  balance = '', 
-  operators = []
+function formatPerformance(value: number) {
+  return typeof value === 'number' && !isNaN(value) ? value.toFixed(2) : '0.00';
+}
+
+const Tooltip = ({ children, content }: { children: React.ReactNode; content: string }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <div className="relative inline-block">
+      <div
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+      >
+        {children}
+      </div>
+      {isVisible && (
+        <div className="absolute z-50 px-2 py-1 text-xs font-medium text-white bg-gray-700 rounded-md shadow-lg -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+          {content}
+          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-700 rotate-45"></div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default function OperatorInfovalidator({
+  publicKey = '',
+  cluster = '',
+  status = '',
+  owner = '',
+  balance = '',
+  operators = [],
 }: ValidatorProps) {
-debugger;
   const truncateKey = (key: string) => {
     if (key.length > 10) {
       return `${key.slice(0, 6)}...${key.slice(-4)}`;
@@ -38,26 +59,28 @@ debugger;
     return key;
   };
 
+  const getDotColor = (status: string) => {
+    return status.toLowerCase() === 'active' ? 'bg-green-500' : 'bg-red-500';
+  };
+
   return (
-    <div className="bg-gray-900 text-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6">
+    <div className="bg-gray-900 text-white rounded-lg w-full p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold">
-          Validator {truncateKey(publicKey)}
-        </h2>
+        <h2 className="text-3xl font-bold">Validator</h2>
       </div>
       <div className="space-y-4 mb-6">
         <div className="grid grid-cols-4 gap-4">
           <span className="font-medium text-gray-400">Public Key</span>
-          <span className="col-span-3">{publicKey}</span>
+          <span className="col-span-3 break-words">{publicKey}</span>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <span className="font-medium text-gray-400">Cluster</span>
-          <span className="col-span-3">{cluster}</span>
+          <span className="col-span-3 break-words">{cluster}</span>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <span className="font-medium text-gray-400">Status</span>
           <span className="col-span-3">
-            <span 
+            <span
               className={`px-2 py-1 rounded text-sm ${status.toLowerCase() === 'active' ? 'bg-green-600' : 'bg-red-600'}`}
             >
               {status}
@@ -71,11 +94,11 @@ debugger;
         </div>
         <div className="grid grid-cols-4 gap-4">
           <span className="font-medium text-gray-400">Owner</span>
-          <span className="col-span-3">{owner}</span>
+          <span className="col-span-3 break-words">{owner}</span>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <span className="font-medium text-gray-400">Balance</span>
-          <span className="col-span-3">{balance}</span>
+          <span className="col-span-3 break-words">{balance}</span>
         </div>
       </div>
       <div>
@@ -85,11 +108,15 @@ debugger;
             <div key={operator.id} className="bg-gray-800 rounded-lg overflow-hidden">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+                  <Tooltip content={operator.status}>
+                    <div className={`w-4 h-4 rounded-full ${getDotColor(operator.status)}`}></div>
+                  </Tooltip>
                   <span className="text-xs text-gray-400">ID: {operator.id}</span>
                 </div>
                 <h4 className="text-sm mb-2 truncate">{operator.name}</h4>
-                <p className="text-2xl font-bold">{formatPerformance(operator.performance['24h'])}%</p>
+                <Tooltip content="Performance 24H">
+                  <p className="text-2xl font-bold cursor-help">{formatPerformance(operator.performance['24h'])}%</p>
+                </Tooltip>
               </div>
             </div>
           ))}
