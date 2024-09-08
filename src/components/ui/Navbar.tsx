@@ -46,14 +46,14 @@ export default function Navbar() {
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex items-center space-x-2 cursor-pointer shadow-2xl rounded-full"
             >
               <Image
-                className="rounded-full shadow-lg"
-                src="/icons/log.jpg"
+                className="rounded-full shadow-2xl "
+                src="/icons/logo.jpg"
                 alt="Logo"
-                width={40}
-                height={40}
+                width={60}
+                height={60}
               />
             </motion.div>
           </Link>

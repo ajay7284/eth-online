@@ -45,7 +45,7 @@ export default function LiquidationTable() {
   }, []);
 
   if (isLoading) {
-    return <div className="text-center p-4">Loading...</div>;
+    return <LiquidationTableSkeleton />;  // Show skeleton while loading
   }
 
   if (error) {
@@ -54,33 +54,121 @@ export default function LiquidationTable() {
 
   return (
     <>
-    <div className="p-4 bg-gray-900 text-gray-100 rounded-lg shadow-xl">
-      <h2 className="text-2xl font-bold mb-4">Liquidations by Liquidator</h2>
+      <div className="p-4 bg-purple-900 bg-opacity-30 text-gray-100 rounded-lg shadow-xl w-[90%] ml-[5%]">
+        <h2 className="text-2xl font-bold mb-4">Liquidations by Liquidator</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="p-2 text-left border-b border-gray-700">Liquidator Address</th>
+                <th className="p-2 text-left border-b border-gray-700">Liquidation Event Count</th>
+                <th className="p-2 text-left border-b border-gray-700">Total Value SSV</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index} className="hover:bg-gray-800">
+                  <td className="p-2 border-b border-gray-700 font-mono">{item.liquidator_address}</td>
+                  <td className="p-2 border-b border-gray-700">{item.liquidation_event_count}</td>
+                  <td className="p-2 border-b border-gray-700">{item.total_value_ssv.toFixed(8)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="mt-4">
+        <LiquidationEventsTable />
+      </div>
+    </>
+  );
+}
+
+const LiquidationTableSkeleton = () => {
+  return (
+    <>
+      <div className="p-4 bg-purple-900 bg-opacity-30 text-gray-100 rounded-lg shadow-xl w-[90%] ml-[5%]">
+        <h2 className="text-2xl font-bold mb-4">Liquidations by Liquidator</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="p-2 text-left border-b border-gray-700">Liquidator Address</th>
+                <th className="p-2 text-left border-b border-gray-700">Liquidation Event Count</th>
+                <th className="p-2 text-left border-b border-gray-700">Total Value SSV</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(12)].map((_, index) => (
+                <tr key={index} className="animate-pulse">
+                  <td className="p-2 border-b border-gray-700">
+                    <div className="h-4 bg-gray-700 rounded w-3/4"></div>
+                  </td>
+                  <td className="p-2 border-b border-gray-700">
+                    <div className="h-4 bg-gray-700 rounded w-1/2"></div>
+                  </td>
+                  <td className="p-2 border-b border-gray-700">
+                    <div className="h-4 bg-gray-700 rounded w-1/4"></div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="mt-4">
+        <LiquidationEventsTableSkeleton /> {/* Skeleton for the events table */}
+      </div>
+    </>
+  );
+};
+
+const LiquidationEventsTableSkeleton = () => {
+  return (
+    <div className="bg-[rgba(249,250,251,0.1)] w-[700px] h-[800px] text-gray-100 p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">Liquidation Events</h2>
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
+        <table className="min-w-full">
           <thead>
-            <tr>
-              <th className="p-2 text-left border-b border-gray-700">Liquidator Address</th>
-              <th className="p-2 text-left border-b border-gray-700">Liquidation Event Count</th>
-              <th className="p-2 text-left border-b border-gray-700">Total Value SSV</th>
+            <tr className="border-b border-gray-700">
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Block Number</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Time</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Liquidator</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Operator IDs</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Owner Link</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">Transaction Link</th>
+              <th className="py-3 px-4 text-left text-sm font-medium text-gray-400">SSV Value</th>
             </tr>
           </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-800">
-                <td className="p-2 border-b border-gray-700 font-mono">{item.liquidator_address}</td>
-                <td className="p-2 border-b border-gray-700">{item.liquidation_event_count}</td>
-                <td className="p-2 border-b border-gray-700">{item.total_value_ssv.toFixed(8)}</td>
+          <tbody className="block max-h-[550px] overflow-y-auto">
+            {[...Array(12)].map((_, index) => (
+              <tr key={index} className="border-b border-gray-800 hover:bg-gray-800 flex w-full animate-pulse">
+                <td className="py-3 px-4 w-[15%]">
+                  <div className="h-4 bg-gray-700 rounded"></div>
+                </td>
+                <td className="py-3 px-4 w-[15%]">
+                  <div className="h-4 bg-gray-700 rounded"></div>
+                </td>
+                <td className="py-3 px-4 w-[20%]">
+                  <div className="h-4 bg-gray-700 rounded w-full"></div>
+                </td>
+                <td className="py-3 px-4 w-[15%]">
+                  <div className="h-4 bg-gray-700 rounded"></div>
+                </td>
+                <td className="py-3 px-4 w-[15%]">
+                  <div className="h-4 bg-gray-700 rounded"></div>
+                </td>
+                <td className="py-3 px-4 w-[15%]">
+                  <div className="h-4 bg-gray-700 rounded"></div>
+                </td>
+                <td className="py-3 px-4 w-[15%]">
+                  <div className="h-4 bg-gray-700 rounded"></div>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
     </div>
-    <div className="mt-4">
-
-      <LiquidationEventsTable/>
-    </div>
-      </>
   );
-}
+};
