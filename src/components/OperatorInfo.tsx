@@ -1,7 +1,7 @@
-import { CircleDollarSign, ExternalLink, Copy, Check } from "lucide-react"
+import React, { useEffect, useState } from 'react'
+import { ExternalLink, Copy, Check } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
 import copy from 'clipboard-copy'
 
 // Fetch data from API and pass it to the component
@@ -43,6 +43,7 @@ interface InfoItemProps {
   valueClassName?: string
   copyable?: boolean
   fullValue?: string
+  logo?: string
 }
 
 const InfoItem: React.FC<InfoItemProps> = ({
@@ -52,21 +53,33 @@ const InfoItem: React.FC<InfoItemProps> = ({
   valueClassName = "",
   copyable = false,
   fullValue = "",
+  logo,
 }) => {
   return (
     <div className="mb-4">
       <div className="text-gray-400 text-sm mb-1">{label}</div>
-      <div className={`${valueClassName} text-gray-100 flex items-center`}>
+      <div className={`${valueClassName} text-gray-100 flex items-center flex-wrap`}>
         {link ? (
-          <Link
-            href={value}
-            target="_blank"
-            className="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 underline hover:no-underline"
-          >
-            {value} <ExternalLink size={14} />
-          </Link>
+          <>
+            <Link
+              href={value}
+              target="_blank"
+              className="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 underline hover:no-underline break-all"
+            >
+              {value} <ExternalLink size={14} />
+            </Link>
+            {logo && (
+              <Image
+                src={logo}
+                alt={`${label} logo`}
+                width={24}
+                height={24}
+                className="ml-2 rounded-full"
+              />
+            )}
+          </>
         ) : (
-          <span className="bg-gray-800 rounded-md px-2 py-1">{value}</span>
+          <span className="bg-gray-800 rounded-md px-2 py-1 break-all">{value}</span>
         )}
         {copyable && <CopyButton text={fullValue || value} />}
       </div>
@@ -86,7 +99,7 @@ const OperatorInfo = ({
   linkedin_url,
   public_key,
   status,
-  descrption,
+  description,
   performance,
   fee,
   logo
@@ -121,7 +134,7 @@ const OperatorInfo = ({
             <div>
               <InfoItem
                 label="Description"
-                value={descrption}
+                value={description}
               />
               <InfoItem label="Location" value={location} />
               <InfoItem label="Eth1 node client" value={eth1_node_client} />
@@ -168,9 +181,6 @@ const OperatorInfo = ({
   )
 }
 
-export default OperatorInfo
-
-// Component usage example with API data
 const OperatorInfoContainer = () => {
   const [data, setData] = useState<any>(null)
 
@@ -190,4 +200,5 @@ const OperatorInfoContainer = () => {
   return <OperatorInfo {...data} />
 }
 
+export default OperatorInfo
 export { OperatorInfoContainer }
