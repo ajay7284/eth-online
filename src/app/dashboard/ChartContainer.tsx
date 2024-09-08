@@ -55,6 +55,7 @@ export default function ChartContainer() {
             <QoqGraph data={operators.operators_qoq.result.rows} title='Operators' />
           ) : (
             <SkeletonLoader />
+            
           )}
         </div>
       </div>

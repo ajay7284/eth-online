@@ -1,88 +1,97 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { IoIosHome } from "react-icons/io";
-import { usePathname } from 'next/navigation'; // Import usePathname
-import { BiSolidDashboard } from "react-icons/bi";
+'use client'
 
-
+import React, { useState, useEffect } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { motion } from "framer-motion"
+import { IoIosHome } from "react-icons/io"
+import { usePathname } from 'next/navigation'
+import { BiSolidDashboard } from "react-icons/bi"
+import { FaUsers } from "react-icons/fa"
 
 export default function Navbar() {
-  const [scrolling, setScrolling] = useState(false);
-  const pathname = usePathname(); // Use usePathname
+  const [scrolling, setScrolling] = useState(false)
+  const [isHomePage, setIsHomePage] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        setScrolling(true);
+        setScrolling(true)
       } else {
-        setScrolling(false);
+        setScrolling(false)
       }
-    };
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  useEffect(() => {
+    setIsHomePage(pathname === "/")
+  }, [pathname])
 
   return (
-    <nav
-      className={`px-8 py-4 fixed top-0 left-0 w-full  transition-all duration-300 z-1111 ${
-        scrolling ? "bg-[#1D1454] shadow-xl" : "bg-transparent"
+    <motion.nav
+      initial={isHomePage ? { y: -100 } : { y: 0 }}
+      animate={{ y: 0 }}
+      transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+      className={`px-4 sm:px-6 lg:px-8 py-4 fixed top-0 left-0 w-full transition-all duration-300 z-50 ${
+        scrolling ? "bg-opacity-90 bg-purple-900 backdrop-blur-sm shadow-xl" : "bg-transparent"
       }`}
-      style={{ zIndex: 1111 }}
-
     >
-      <div className="container mx-auto  ">
-        <div className="flex items-center">
-          <Link href="/">
-            <div className="flex rounded-full bg-white cursor-pointer ">
+      <div className="container mx-auto">
+        <div className="flex items-center justify-between">
+          <Link href="/" passHref>
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center space-x-2 cursor-pointer"
+            >
               <Image
-                className="rounded-full shadow-lg transform hover:scale-110 transition-transform duration-200"
+                className="rounded-full shadow-lg"
                 src="/icons/log.jpg"
                 alt="Logo"
-                width={60}
-                height={60}
+                width={40}
+                height={40}
               />
-            </div>
+              <span className="text-white text-xl font-bold hidden sm:inline">SSV DataLens</span>
+            </motion.div>
           </Link>
 
-          <div className="flex items-center justify-between space-x-4 ml-[35%] bg-white shadow-lg rounded-full py-2 px-4 w-[300px]">
-            <Link href="/" passHref>
-              <motion.div
-                whileTap={{ scale: 0.9 }}
-                className={`cursor-pointer w-[70px] flex items-center gap-[3px] ${pathname === "/" ? "font-bold" : ""}`}
-              >
-                <IoIosHome />
-                Home
-              </motion.div>
-            </Link>
-
-            <Link href="/dashboard" passHref>
-              <motion.div
-                whileTap={{ scale: 0.9 }}
-                className={`cursor-pointer w-[90px] flex items-center gap-[3px]  ${pathname === "/dashboard" ? "font-bold" : ""}`}
-              >
-                Dashboard
-              </motion.div>
-            </Link>
-
-            <Link href="/dao" passHref>
-              <motion.div
-                whileTap={{ scale: 0.9 }}
-                className={`cursor-pointer  w-[90px] flex items-center gap-[3px]  ${pathname === "/dao" ? "font-bold" : ""}`}
-              >
-                DAO
-              </motion.div>
-            </Link>
-          
+          <div className="flex items-center justify-center space-x-1 sm:space-x-4 bg-opacity-20 bg-white rounded-full py-2 px-3 sm:px-4">
+            <NavLink href="/" icon={<IoIosHome />} text="Home" isActive={pathname === "/"} />
+            <NavLink href="/dashboard" icon={<BiSolidDashboard />} text="Dashboard" isActive={pathname === "/dashboard"} />
+            <NavLink href="/dao" icon={<FaUsers />} text="DAO" isActive={pathname === "/dao"} />
           </div>
         </div>
       </div>
-    </nav>
-  );
+    </motion.nav>
+  )
+}
+
+interface NavLinkProps {
+  href: string
+  icon: React.ReactNode
+  text: string
+  isActive: boolean
+}
+
+function NavLink({ href, icon, text, isActive }: NavLinkProps) {
+  return (
+    <Link href={href} passHref>
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className={`cursor-pointer flex items-center space-x-1 px-3 py-2 rounded-full transition-colors duration-200 ${
+          isActive 
+            ? "bg-[#15C1E1] text-purple-900 font-bold" 
+            : "text-gray-300 hover:bg-purple-800 hover:text-white"
+        }`}
+      >
+        {icon}
+        <span className="hidden sm:inline">{text}</span>
+      </motion.div>
+    </Link>
+  )
 }

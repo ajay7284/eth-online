@@ -39,8 +39,8 @@ export default function OperatorsOverTime({ data, title }: { data: DataPoint[], 
       {
         label: 'Amount Of Operators',
         data: data.map(d => d.cumulative_net_additions),
-        borderColor: 'rgb(59, 130, 246)',
-        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+        borderColor: 'rgb(6, 182, 212)',
+        backgroundColor: 'rgba(6, 182, 212, 0.5)',
         tension: 0.1,
         borderWidth: 2,
         pointRadius: 0,
@@ -120,8 +120,8 @@ export default function OperatorsOverTime({ data, title }: { data: DataPoint[], 
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-gray-900 p-6 rounded-lg shadow-xl">
-      <h2 className="text-2xl font-bold text-blue-400 mb-4">Amount of {title} Over Time</h2>
+    <div className="w-full max-w-4xl mx-auto bg-opacity-30 bg-purple-900 p-6 rounded-lg shadow-xl backdrop-blur-sm">
+      <h2 className="text-2xl font-bold text-teal-300 mb-4">Amount of {title} Over Time</h2>
       <div className="relative h-[400px]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

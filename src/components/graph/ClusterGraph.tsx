@@ -1,15 +1,14 @@
-"use client"
+'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { gql } from '@apollo/client';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { set } from 'date-fns';
+import { gql } from '@apollo/client'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { motion } from 'framer-motion'
 
-// Initialize the Apollo Client
 const client = new ApolloClient({
   uri: `https://gateway.thegraph.com/api/${process.env.NEXT_PUBLIC_SUBGRAPH_ENV}/subgraphs/id/7V45fKPugp9psQjgrGsfif98gWzCyC6ChN7CW98VyQnr`,
   cache: new InMemoryCache()
-});
+})
 
 const GET_CLUSTERS = gql`
   query GetClusters($first: Int!, $skip: Int!) {
@@ -30,48 +29,47 @@ interface ClusterGroup {
 }
 
 async function fetchAllClusters() {
-  const pageSize = 1000;
-  let skip = 0;
-  let allClusters: any[] = [];
-  let hasMore = true;
+  const pageSize = 1000
+  let skip = 0
+  let allClusters: any[] = []
+  let hasMore = true
 
   while (hasMore) {
     try {
       const { data } = await client.query({
         query: GET_CLUSTERS,
         variables: { first: pageSize, skip: skip }
-      });
+      })
 
       if (data.clusters.length > 0) {
-        allClusters = allClusters.concat(data.clusters);
-        skip += pageSize;
+        allClusters = allClusters.concat(data.clusters)
+        skip += pageSize
       } else {
-        hasMore = false;
+        hasMore = false
       }
     } catch (error) {
-      console.error('Error fetching clusters:', error);
-      hasMore = false;
+      console.error('Error fetching clusters:', error)
+      hasMore = false
     }
   }
-  return allClusters;
+  return allClusters
 }
 
-function groupClustersByOperatorIdsLength(clusters:any[]) {
-  const groups:any = {
+function groupClustersByOperatorIdsLength(clusters: any[]) {
+  const groups: any = {
     4: [],
     7: [],
     10: [],
     13: []
-  };
+  }
 
   clusters.forEach(cluster => {
-    const length = cluster.operatorIds.length;
+    const length = cluster.operatorIds.length
     if (groups.hasOwnProperty(length)) {
-      groups[length].push(cluster);
+      groups[length].push(cluster)
     }
-  });
-  console.log('groups:', groups);
-  return groups;
+  })
+  return groups
 }
 
 const colors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3']
@@ -121,8 +119,8 @@ export default function ClusterGraph() {
       setClusterGroups(groups);
       setIsLoading(false);
     }
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   useEffect(() => {
     if (clusterGroups) {
@@ -131,31 +129,31 @@ export default function ClusterGraph() {
         { id: 2, operatorCount: 7, clusterCount: clusterGroups[7].length, x: 75, y: 25 },
         { id: 3, operatorCount: 10, clusterCount: clusterGroups[10].length, x: 25, y: 75 },
         { id: 4, operatorCount: 13, clusterCount: clusterGroups[13].length, x: 75, y: 75 },
-      ];
-      setData(newData);
+      ]
+      setData(newData)
     }
-  }, [clusterGroups]);
+  }, [clusterGroups])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (dragging !== null && containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        const rect = containerRef.current.getBoundingClientRect()
+        const x = ((e.clientX - rect.left) / rect.width) * 100
+        const y = ((e.clientY - rect.top) / rect.height) * 100
         setData(prevData => 
           prevData.map(item => 
             item.id === dragging ? { ...item, x, y } : item
           )
-        );
+        )
       }
-    };
+    }
 
     const handleMouseUp = () => {
-      setDragging(null);
-    };
+      setDragging(null)
+    }
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
@@ -167,16 +165,16 @@ export default function ClusterGraph() {
     return <SkeletonClusterGraph />;
   }
 
-  const maxClusterCount = Math.max(...data.map(d => d.clusterCount));
+  const maxClusterCount = Math.max(...data.map(d => d.clusterCount))
 
   return (
-    <div className="w-[700px] h-[700px] bg-[rgba(249,250,251,0.1)] mx-auto p-4  ">
-      <h2 className="text-2xl font-bold mb-4 text-white text-center">Interactive Cluster Distribution</h2>
+    <div className="w-[700px] h-[700px] bg-opacity-30 bg-purple-900 mx-auto p-4 rounded-lg shadow-xl backdrop-blur-sm">
+      <h2 className="text-2xl font-bold mb-4 text-teal-300 text-center">Interactive Cluster Distribution</h2>
       <div ref={containerRef} className="relative aspect-square h-[580px] rounded-lg overflow-hidden">
         {data.map((item, index) => {
-          const size = (item.clusterCount / maxClusterCount) * 40 + 10; // 10% to 50% of container
+          const size = (item.clusterCount / maxClusterCount) * 40 + 10
           return (
-            <div
+            <motion.div
               key={item.id}
               className="absolute rounded-full flex items-center justify-center cursor-move transition-shadow duration-300 hover:shadow-lg"
               style={{
@@ -184,12 +182,14 @@ export default function ClusterGraph() {
                 height: `${size}%`,
                 left: `${item.x}%`,
                 top: `${item.y}%`,
-                transform: 'translate(-50%, -50%)',
                 backgroundColor: colors[index % colors.length],
               }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
               onMouseDown={(e) => {
-                e.preventDefault();
-                setDragging(item.id);
+                e.preventDefault()
+                setDragging(item.id)
               }}
               onClick={() => setSelectedBubble(item)}
             >
@@ -197,21 +197,21 @@ export default function ClusterGraph() {
                 <div className="font-bold text-xs sm:text-sm md:text-base">{item.operatorCount} ops</div>
                 <div className="text-xs sm:text-sm md:text-base">{item.clusterCount} clusters</div>
               </div>
-            </div>
-          );
+            </motion.div>
+          )
         })}
       </div>
       <div className="mt-4 flex flex-wrap justify-center">
         {data.map((item, index) => (
           <div key={item.id} className="flex items-center mr-4 mb-2">
             <div
-              className="w-4 h-4 mr-2"
+              className="w-4 h-4 mr-2 rounded-full"
               style={{ backgroundColor: colors[index % colors.length] }}
             ></div>
-            <span className="text-sm text-white">{item.operatorCount} Operators</span>
+            <span className="text-sm text-gray-300">{item.operatorCount} Operators</span>
           </div>
         ))}
       </div>
     </div>
-  );
+  )
 }
