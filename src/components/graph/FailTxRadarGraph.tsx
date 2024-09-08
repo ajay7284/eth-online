@@ -59,66 +59,58 @@ const FailTxRadarGraph: React.FC = () => {
   const radarChartData = transformData(chartData)
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full h-[800px] p-4 bg-opacity-30 bg-purple-900 rounded-lg shadow-xl flex backdrop-blur-sm"
-    >
-      <div className="w-[900px] rounded-lg shadow-xl">
-        <h2 className="text-2xl font-bold text-teal-300 mb-4">Failed transaction in 30 days</h2>
-        <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarChartData}>
-            <PolarGrid stroke="rgba(255, 255, 255, 0.2)" />
-            <PolarAngleAxis dataKey="subject" tick={{ fill: '#e2e8f0' }} />
-            <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} tick={{ fill: '#e2e8f0' }} />
-            <Radar name="Failed Transactions" dataKey="A" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.6} />
-            <Legend wrapperStyle={{ color: '#e2e8f0' }} />
-          </RadarChart>
-        </ResponsiveContainer>
+    <div className="w-full h-[900px] p-4 bg-[rgba(249,250,251,0.1)] rounded-lg shadow-xl flex">
+        <div className="w-[900px]  rounded-lg  ">
+      <h2 className="text-2xl font-bold text-white mb-4">Failed transaction in 30 days</h2>
+      <ResponsiveContainer width="90%" height="100%">
+        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarChartData}>
+          <PolarGrid />
+          <PolarAngleAxis dataKey="subject" />
+          <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} />
+          <Radar name="subject" dataKey="fullMark" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}  />
+          <Legend wrapperStyle={{ bottom: 55 }} />        </RadarChart>
+      </ResponsiveContainer>
       </div>
-      <div className="p-4 bg-opacity-50 bg-gray-800 w-full rounded-lg shadow ml-4">
-        <h2 className="text-2xl font-bold mb-4 text-teal-300">Failed TXNS 30d</h2>
-        <input
-          type="text"
-          placeholder="Search transaction types..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-2 mb-4 border rounded bg-gray-700 text-white placeholder-gray-400"
-        />
-        <div className="overflow-x-auto">
-          <table className="w-full bg-opacity-50 bg-gray-900 rounded-lg overflow-hidden">
-            <thead className="bg-opacity-50 bg-gray-800">
-              <tr>
-                <th
-                  className="p-3 text-left cursor-pointer text-teal-300"
-                  onClick={() => handleSort('transaction_type')}
-                >
-                  Transaction Type
-                  {sortColumn === 'transaction_type' && (sortDirection === 'asc' ? ' ▲' : ' ▼')}
-                </th>
-                <th
-                  className="p-3 text-left cursor-pointer text-teal-300"
-                  onClick={() => handleSort('failed_in_last_30_days')}
-                >
-                  Failed in Last 30 Days
-                  {sortColumn === 'failed_in_last_30_days' && (sortDirection === 'asc' ? ' ▲' : ' ▼')}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedAndFilteredTransactions.map((transaction, index) => (
-                <tr key={index} className={index % 2 === 0 ? 'bg-opacity-25 bg-gray-800' : 'bg-opacity-25 bg-gray-700'}>
-                  <td className="p-3 border-t border-gray-700 text-gray-300">{transaction.transaction_type}</td>
-                  <td className="p-3 border-t border-gray-700 text-center text-gray-300">{transaction.failed_in_last_30_days}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </motion.div>
-  )
+      <div className="p-4 bg-[rgba(249,250,251,0.1)] w-[80%] rounded-lg ">
+      <h2 className="text-2xl font-bold mb-4 text-white">Failed TXNS 30d</h2>
+      <input
+        type="text"
+        placeholder="Search transaction types..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full p-2 mb-4 border  text-white rounded bg-[rgba(249,250,251,0.1)]"
+      />
+      <table className="w-full bg-[rgba(249,250,251,0.1)] rounded-lg overflow-hidden">
+        <thead className="bg-[rgba(249,250,251,0.1)]">
+          <tr>
+            <th
+              className="p-3 text-left cursor-pointer text-gray-400"
+              onClick={() => handleSort('transaction_type')}
+            >
+              Transaction Type
+              {sortColumn === 'transaction_type' && (sortDirection === 'asc' ? ' ▲' : ' ▼')}
+            </th>
+            <th
+              className="p-3 text-left cursor-pointer text-gray-400"
+              onClick={() => handleSort('failed_in_last_30_days')}
+            >
+              Failed in Last 30 Days
+              {sortColumn === 'failed_in_last_30_days' && (sortDirection === 'asc' ? ' ▲' : ' ▼')}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedAndFilteredTransactions.map((transaction, index) => (
+            <tr key={index} className={index % 2 === 0 ? 'bg-[rgba(249,250,251,0.1)]' : 'bg-[rgba(249,250,251,0.1)]'}>
+              <td className="p-3 border-t text-white">{transaction.transaction_type}</td>
+              <td className="p-3 border-t text-center text-white">{transaction.failed_in_last_30_days}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    </div>
+  );
 }
 
 export default FailTxRadarGraph

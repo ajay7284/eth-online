@@ -18,7 +18,7 @@ const GET_CLUSTERS = gql`
       operatorIds
     }
   }
-`
+`;
 
 interface ClusterGroup {
   id: number
@@ -72,20 +72,52 @@ function groupClustersByOperatorIdsLength(clusters: any[]) {
   return groups
 }
 
-const colors = ['#06b6d4', '#8b5cf6', '#f472b6', '#22c55e']
+const colors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3']
+
+const SkeletonClusterGraph: React.FC = () => (
+  <div className="w-[700px] h-[700px] bg-[rgba(249,250,251,0.1)] mx-auto p-4 animate-pulse">
+    <div className="h-8 bg-gray-300 rounded w-3/4 mx-auto mb-4"></div>
+    <div className="relative aspect-square h-[580px] rounded-lg overflow-hidden bg-gray-300">
+      {[...Array(4)].map((_, index) => (
+        <div
+          key={index}
+          className="absolute rounded-full bg-gray-400"
+          style={{
+            width: '30%',
+            height: '30%',
+            left: `${25 + (index % 2) * 50}%`,
+            top: `${25 + Math.floor(index / 2) * 50}%`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        ></div>
+      ))}
+    </div>
+    <div className="mt-4 flex flex-wrap justify-center">
+      {[...Array(4)].map((_, index) => (
+        <div key={index} className="flex items-center mr-4 mb-2">
+          <div className="w-4 h-4 mr-2 bg-gray-300"></div>
+          <div className="w-20 h-4 bg-gray-300 rounded"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 export default function ClusterGraph() {
-  const [data, setData] = useState<ClusterGroup[]>([])
-  const [selectedBubble, setSelectedBubble] = useState<ClusterGroup | null>(null)
-  const [dragging, setDragging] = useState<number | null>(null)
-  const [clusterGroups, setClusterGroups] = useState<any | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [data, setData] = useState<ClusterGroup[]>([]);
+  const [selectedBubble, setSelectedBubble] = useState<ClusterGroup | null>(null);
+  const [dragging, setDragging] = useState<number | null>(null);
+  const [clusterGroups, setClusterGroups] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const fetchedClusters = await fetchAllClusters()
-      const groups = groupClustersByOperatorIdsLength(fetchedClusters)
-      setClusterGroups(groups)
+      setIsLoading(true);
+      const fetchedClusters = await fetchAllClusters();
+      const groups = groupClustersByOperatorIdsLength(fetchedClusters);
+      setClusterGroups(groups);
+      setIsLoading(false);
     }
     fetchData()
   }, [])
@@ -124,10 +156,14 @@ export default function ClusterGraph() {
     document.addEventListener('mouseup', handleMouseUp)
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
-  }, [dragging])
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [dragging]);
+
+  if (isLoading) {
+    return <SkeletonClusterGraph />;
+  }
 
   const maxClusterCount = Math.max(...data.map(d => d.clusterCount))
 

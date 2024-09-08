@@ -55,7 +55,6 @@ export default function Navbar() {
                 width={40}
                 height={40}
               />
-              <span className="text-white text-xl font-bold hidden sm:inline">SSV DataLens</span>
             </motion.div>
           </Link>
 
