@@ -11,7 +11,7 @@ export default function DaoSection() {
       <Header title={'Analysis Of SSV Token and DAO'}/>
       <Card/>
 
-      <div className='flex ml-[10%] mt-[30px]'>
+      <div className='flex ml-[10%] mt-[30px] ' >
       <CryptoPieChart/>
       <SSVHoldersChart/>
       </div>
