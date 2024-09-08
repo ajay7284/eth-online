@@ -4,9 +4,9 @@ import NumberTicker from './lib/Count';
 import NumberTickerDemo from './magicui/NumberTickerDemo';
 import { GradualSpacingDemo } from './magicui/GradualSpacingDemo';
 import { FlipTextDemo } from './magicui/FlipTextDemo';
-import DataTable from './OperatorTable';
 import ValidatorsTable from './ValidatorsTable';
 import UniqueMovingGraph from './UniqueMovingGraph';
+import DataTable from './OperatorTable';
 
 export default function Hero() {
   return (

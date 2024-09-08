@@ -4,19 +4,27 @@ import NumberTickerDemo from "./NumberTickerDemo";
 import { url } from "inspector";
 
 const data = [
-  { type: "Registered Validators", value: 100 , days:""},
-  { type: "7d Validators Growth", value: 100 , days:"7d"},
-  { type: "30d Validators Growth", value: 100,days:"30d" },
-  { type: "Operators", value: 5000 , days:""},
-  { type: "7d Operator  Growth", value: 50 ,days:"7d"},
-  { type: "30d Operator Growth", value: 100,days:"30d" },
+  { type: "Registered Validators", value: 100, days: "" },
+  { type: "7d Validators Growth", value: 100, days: "7d" },
+  { type: "30d Validators Growth", value: 100, days: "30d" },
+  { type: "Operators", value: 5000, days: "" },
+  { type: "7d Operator  Growth", value: 50, days: "7d" },
+  { type: "30d Operator Growth", value: 100, days: "30d" },
 ];
 
-const DataCard = ({ type, value,days }: { type: string; value: number ,days:string}) => {
+const DataCard = ({
+  type,
+  value,
+  days,
+}: {
+  type: string;
+  value: number;
+  days: string;
+}) => {
   return (
     <figure
       className={cn(
-        "relative w-64 h-[160px] cursor-pointer overflow-hidden rounded-xl border p-4 shadow-2xl",
+        "relative w-64 h-[160px] cursor-pointer overflow-hidden rounded-xl border p-4 shadow-2xl bg-[rgba(249,250,251,0.1)] ",
         // light styles
         "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
         // dark styles
@@ -24,32 +32,18 @@ const DataCard = ({ type, value,days }: { type: string; value: number ,days:stri
       )}
     >
      
-
-      <h1 style={{
-        position:"absolute",
-        right:'15px',
-        fontWeight:"bold",
-        textDecoration: "underline",
-        fontSize:"18px"
-
-      }}>
-        {days}
-      </h1>
-
-      <h1>
+      <div className="flex justify-center items-center h-full w-full flex-col">
+        <NumberTickerDemo value={value} />
         <h1
-          className="text-white shadow-xl text-bold text-md"
+          className="text-white  text-bold text-md"
           style={{
             fontSize: "18px",
-            fontWeight:"bold",
-
+            fontWeight: "bold",
+            color:"#15C1E1"
           }}
         >
           {type}
         </h1>
-      </h1>
-      <div className="flex flex-col justify-center ml-[30%] mt-[5px] h-[100px] w-[100px] rounded-full bg-[#000] shadow-2xl  items-center gap-2">
-        <NumberTickerDemo value={value} />
       </div>
     </figure>
   );
