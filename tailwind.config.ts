@@ -31,6 +31,9 @@ const config: Config = {
       fontFamily: {
         sans: ['Geist', ...defaultTheme.fontFamily.sans], // Make Geist the default sans font
       },
+      zIndex: {
+        '1111': '1111',
+      },
     },
   },
   plugins: [typography],
