@@ -4,15 +4,15 @@ import NumberTickerDemo from "./NumberTickerDemo";
 import { url } from "inspector";
 
 const data = [
-  { type: "Registered Validators", value: 100 },
-  { type: "7d Validators Growth", value: 100 },
-  { type: "30d Validators Growth", value: 100 },
-  { type: "Operators", value: 5000 },
-  { type: "7d Operator  Growth", value: 50 },
-  { type: "30d Operator Growth", value: 100 },
+  { type: "Registered Validators", value: 100 , days:""},
+  { type: "7d Validators Growth", value: 100 , days:"7d"},
+  { type: "30d Validators Growth", value: 100,days:"30d" },
+  { type: "Operators", value: 5000 , days:""},
+  { type: "7d Operator  Growth", value: 50 ,days:"7d"},
+  { type: "30d Operator Growth", value: 100,days:"30d" },
 ];
 
-const DataCard = ({ type, value }: { type: string; value: number }) => {
+const DataCard = ({ type, value,days }: { type: string; value: number ,days:string}) => {
   return (
     <figure
       className={cn(
@@ -23,24 +23,26 @@ const DataCard = ({ type, value }: { type: string; value: number }) => {
         "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
       )}
     >
-      <img
-        src="/image/up.png"
-        alt=""
-        style={{
-          height: "40px",
-          width: "40px",
-          position: "absolute",
-          right: "15px",
-          top:"5px"
-        }}
-      />
+     
+
+      <h1 style={{
+        position:"absolute",
+        right:'15px',
+        fontWeight:"bold",
+        textDecoration: "underline",
+        fontSize:"18px"
+
+      }}>
+        {days}
+      </h1>
 
       <h1>
         <h1
           className="text-white shadow-xl text-bold text-md"
           style={{
-            fontSize: "24x",
-            fontWeight:"bold"
+            fontSize: "18px",
+            fontWeight:"bold",
+
           }}
         >
           {type}

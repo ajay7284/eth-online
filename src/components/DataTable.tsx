@@ -111,7 +111,7 @@ export default function DataTable() {
   const paginatedOperators = getPaginatedData()
 
   return (
-    <div className="bg-gray-900 text-gray-100 p-6 rounded-lg shadow-lg">
+    <div className="bg-[rgba(249,250,251,0.1)]   w-[700px] h-[730px] ml-[30px]  text-gray-100 p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Operators</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full">

@@ -31,9 +31,11 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`px-8 py-4 fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+      className={`px-8 py-4 fixed top-0 left-0 w-full  transition-all duration-300 z-1111 ${
         scrolling ? "bg-[#1D1454] shadow-xl" : "bg-transparent"
       }`}
+      style={{ zIndex: 1111 }}
+
     >
       <div className="container mx-auto  ">
         <div className="flex items-center">

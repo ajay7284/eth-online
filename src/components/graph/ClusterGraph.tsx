@@ -134,9 +134,9 @@ export default function ClusterGraph() {
   const maxClusterCount = Math.max(...data.map(d => d.clusterCount));
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-4  ">
-      <h2 className="text-2xl font-bold mb-4 text-center">Interactive Cluster Distribution</h2>
-      <div ref={containerRef} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+    <div className="w-[700px] h-[700px] bg-[rgba(249,250,251,0.1)] mx-auto p-4  ">
+      <h2 className="text-2xl font-bold mb-4 text-white text-center">Interactive Cluster Distribution</h2>
+      <div ref={containerRef} className="relative aspect-square h-[580px] rounded-lg overflow-hidden">
         {data.map((item, index) => {
           const size = (item.clusterCount / maxClusterCount) * 40 + 10; // 10% to 50% of container
           return (
@@ -157,7 +157,7 @@ export default function ClusterGraph() {
               }}
               onClick={() => setSelectedBubble(item)}
             >
-              <div className="text-white text-center">
+              <div className="text-white text-center flex justify-center items-center flex-col">
                 <div className="font-bold text-xs sm:text-sm md:text-base">{item.operatorCount} ops</div>
                 <div className="text-xs sm:text-sm md:text-base">{item.clusterCount} clusters</div>
               </div>
@@ -166,7 +166,7 @@ export default function ClusterGraph() {
         })}
       </div>
       {selectedBubble && (
-        <div className="mt-4 p-4 bg-gray-200 rounded-md">
+        <div className="mt-4 p-4 bg-gray-200 rounded-md absolute ">
           <h3 className="text-lg font-semibold">Selected Bubble Details</h3>
           <p>Operator Count: {selectedBubble.operatorCount}</p>
           <p>Cluster Count: {selectedBubble.clusterCount}</p>
@@ -179,7 +179,7 @@ export default function ClusterGraph() {
               className="w-4 h-4 mr-2"
               style={{ backgroundColor: colors[index % colors.length] }}
             ></div>
-            <span className="text-sm">{item.operatorCount} Operators</span>
+            <span className="text-sm text-white">{item.operatorCount} Operators</span>
           </div>
         ))}
       </div>
