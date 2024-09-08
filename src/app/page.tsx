@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/ui/Navbar";
-import DataTable from "@/components/DataTable";
+import DataTable from "@/components/OperatorTable";
 import ValidatorsTable from "@/components/ValidatorsTable";
 import MarqueeDemo from "@/components/magicui/MarqueeDemo";
 import DaoSection from "@/components/ssv-token/DaoSection";
@@ -20,18 +20,8 @@ export default function Home() {
       <Navbar />
       <Hero />
       <DaoSection />
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="w-full lg:w-1/2">
-            <DataTable />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <ValidatorsTable />
-          </div>
-        </div>
-      </div>
-
       <SsvAnalysis />
+     
     </div>
   );
 }

@@ -4,40 +4,52 @@ import NumberTickerDemo from "./NumberTickerDemo";
 import { url } from "inspector";
 
 const data = [
-  { type: "Validators", value: 100 },
-  { type: "7d Validators Growth", value: 100 },
-  { type: "30d Validators Growth", value: 100 },
-  { type: "Operators", value: 5000 },
-  { type: "Operator", value: 100 },
-  { type: "7d Operator  Growth", value: 50 },
-  { type: "30d Operator Growth", value: 100 },
+  { type: "Registered Validators", value: 100 , days:""},
+  { type: "7d Validators Growth", value: 100 , days:"7d"},
+  { type: "30d Validators Growth", value: 100,days:"30d" },
+  { type: "Operators", value: 5000 , days:""},
+  { type: "7d Operator  Growth", value: 50 ,days:"7d"},
+  { type: "30d Operator Growth", value: 100,days:"30d" },
 ];
 
-
-
-const DataCard = ({ type, value }: { type: string; value: number }) => {
+const DataCard = ({ type, value,days }: { type: string; value: number ,days:string}) => {
   return (
     <figure
       className={cn(
-        "relative w-64 h-[100px] cursor-pointer overflow-hidden rounded-xl border p-4",
+        "relative w-64 h-[160px] cursor-pointer overflow-hidden rounded-xl border p-4 shadow-2xl",
         // light styles
         "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
         // dark styles
-        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]",
+        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
       )}
-
     >
-      <img src="/icons/chart.png" alt="" style={{
-        height:"40px",
-        width:"40px",
-      position:"absolute",
-      right:"15px"
-      }}/>
-      <div className="flex flex-col justify-center items-center gap-2">
+     
+
+      <h1 style={{
+        position:"absolute",
+        right:'15px',
+        fontWeight:"bold",
+        textDecoration: "underline",
+        fontSize:"18px"
+
+      }}>
+        {days}
+      </h1>
+
+      <h1>
+        <h1
+          className="text-white shadow-xl text-bold text-md"
+          style={{
+            fontSize: "18px",
+            fontWeight:"bold",
+
+          }}
+        >
+          {type}
+        </h1>
+      </h1>
+      <div className="flex flex-col justify-center ml-[30%] mt-[5px] h-[100px] w-[100px] rounded-full bg-[#000] shadow-2xl  items-center gap-2">
         <NumberTickerDemo value={value} />
-        <h1 className="text-white shadow-xl text-bold text-md" style={{
-          fontSize:"20x"
-        }}>{type}</h1>
       </div>
     </figure>
   );

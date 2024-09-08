@@ -70,7 +70,7 @@ export default function ValidatorsTable() {
   const paginatedValidators = getPaginatedData()
 
   return (
-    <div className="bg-gray-900 text-gray-100 p-6 rounded-lg shadow-lg">
+    <div className="bg-[rgba(249,250,251,0.1)] w-[700px] h-[730px] ml-[25px] text-gray-100 p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4">Validators</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full">
@@ -85,12 +85,16 @@ export default function ValidatorsTable() {
           <tbody>
             {paginatedValidators.map((validator:any, index:any) => (
               <tr key={index} className="border-b border-gray-800 hover:bg-gray-800">
-                <td className="py-3 px-4 text-sm">{validator.public_key.slice(0, 10)}...{validator.public_key.slice(-4)}</td>
+                <td 
+                  className="py-3 px-4 text-sm cursor-pointer hover:underline"
+                  onClick={() => openModal(validator)}
+                >
+                  {validator.public_key.slice(0, 10)}...{validator.public_key.slice(-4)}
+                </td>
                 <td className="py-3 px-4 text-sm">
                   <div className="flex items-center space-x-2">
                     <span 
-                      onClick={() => openModal(validator)}
-                      className="bg-blue-900 text-blue-300 py-1 px-2 rounded-full cursor-pointer hover:bg-blue-700 hover:underline"
+                      className="bg-blue-900 text-blue-300 py-1 px-2 rounded-full cursor-default"
                     >
                       {validator.owner_address.slice(0, 6)}...{validator.owner_address.slice(-4)}
                     </span>

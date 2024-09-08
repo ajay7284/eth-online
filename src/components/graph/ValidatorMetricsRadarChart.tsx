@@ -44,9 +44,9 @@ const ValidatorRadarChart: React.FC = () => {
   const radarChartData = transformData(chartData);
 
   return (
-    <div className="w-[700px] h-[700px] p-4 bg-white rounded-lg shadow-xl">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Top 5 Entities by Validator Count</h2>
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="w-[700px] h-[700px] mr-[20px] p-4 bg-[rgba(249,250,251,0.1)] rounded-lg shadow-xl">
+      <h2 className="text-2xl font-bold text-white mb-4">Top 5 Entities by Validator Count</h2>
+      <ResponsiveContainer width="100%" height="90%">
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarChartData}>
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
