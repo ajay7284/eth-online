@@ -50,7 +50,7 @@ export default function DataTable() {
   const fetchOperators = async (page: number) => {
     try {
       console.log(`Fetching operators for page: ${page}`);
-      const response = await fetch(`/api/get-data-operators?page=${page}&perPage=${itemsPerPage}`);
+      const response = await fetch(`/api/data-operators?page=${page}&perPage=${itemsPerPage}`);
       console.log(`Response status: ${response.status}`);
       
       if (!response.ok) {

@@ -23,7 +23,7 @@ const ValidatorRadarChart: React.FC = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const data = await fetch('/api/get-dune-growthdata');
+        const data = await fetch('/api/dune-growthdata');
         const response = await data.json();
         
         if (response.network_entities && response.network_entities.result && response.network_entities.result.rows) {

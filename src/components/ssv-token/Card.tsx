@@ -67,7 +67,7 @@ const PriceDashboard = () => {
     try {
       setIsLoading(true)
       setError(null)
-      const response = await fetch('/api/get-dune-dao')
+      const response = await fetch('/api/dune-dao')
       if (response.status === 429) {
         if (retryCount > 0) {
           console.warn(`Rate limit hit, retrying after ${delay}ms...`)

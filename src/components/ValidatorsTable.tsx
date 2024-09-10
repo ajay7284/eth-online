@@ -40,7 +40,7 @@ export default function ValidatorsTable() {
     try {
       setLoading(true);
       const response = await fetch(
-        `/api/get-data-validators?page=${page}&perPage=${itemsPerPage}`
+        `/api/data-validators?page=${page}&perPage=${itemsPerPage}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch validators");

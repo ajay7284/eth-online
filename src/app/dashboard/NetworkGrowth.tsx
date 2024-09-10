@@ -23,8 +23,8 @@ export default function NetworkGrowth() {
   const getdata = async () => {
     try {
       const [growthData, overtimeData] = await Promise.all([
-        fetch("/api/get-dune-growthdata").then((res) => res.json()),
-        fetch("/api/get-dune-overtime").then((res) => res.json()),
+        fetch("/api/dune-growthdata").then((res) => res.json()),
+        fetch("/api/dune-overtime").then((res) => res.json()),
       ]);
 
       setOperators(growthData.operators);

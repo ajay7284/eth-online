@@ -62,7 +62,7 @@ export default function MarqueeDemo() {
   const [operatorData, setOperatorData] = useState<any>();
   const getdata = async (retryCount = 3, delay = 2000) => {
     try {
-      const response = await fetch('/api/get-dune-data');
+      const response = await fetch('/api/dune-data');
       if (response.status === 500) {
         if (retryCount > 0) {
           console.warn(`Rate limit hit, retrying after ${delay}ms...`);

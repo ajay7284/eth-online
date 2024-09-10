@@ -45,7 +45,7 @@ const FailTxRadarGraph: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/get-fail-tx')
+        const response = await fetch('/api/fail-tx')
         const data = await response.json()
         setChartData(data.failTx.result.rows)
       } catch (error) {

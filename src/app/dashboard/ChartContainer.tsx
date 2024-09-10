@@ -20,8 +20,8 @@ export default function ChartContainer() {
   const getdata = async (retryCount = 3, delay = 2000) => {
     try {
       const [growthDataResponse, overtimeDataResponse] = await Promise.all([
-        fetch('/api/get-dune-growthdata'),
-        fetch('/api/get-dune-overtime')
+        fetch('/api/dune-growthdata'),
+        fetch('/api/dune-overtime')
       ]);
   
       // If the first response is 429, retry after delay

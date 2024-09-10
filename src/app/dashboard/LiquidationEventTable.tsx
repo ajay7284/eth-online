@@ -23,7 +23,7 @@ export default function LiquidationEventsTable() {
   const getdata = async (retryCount = 3, delay = 2000) => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/get-liquidation');
+      const response = await fetch('/api/liquidation');
       if (response.status === 500) {
         if (retryCount > 0) {
           console.warn(`Rate limit hit, retrying after ${delay}ms...`);

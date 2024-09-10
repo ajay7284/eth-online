@@ -19,7 +19,7 @@ export default function CryptoPieChart() {
   const getdata = async (retryCount = 3, delay = 2000) => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/get-dune-herodao')
+      const response = await fetch('/api/dune-herodao')
       if (response.status === 429) {
         if (retryCount > 0) {
           console.warn(`Rate limit hit, retrying after ${delay}ms...`)
